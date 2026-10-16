@@ -106,7 +106,7 @@ export const nordHonshu: RegionContent = {
         },
         {
           stacks: [
-            { span: 2, blocks: [{ t: "figure", photo: { motif: "cherry", aspect: 2, caption: "Le château de Hirosaki et ses cerisiers", wiki: "hirosaki-castle", seed: 0 } }] },
+            { span: 2, blocks: [{ t: "figure", photo: { motif: "cherry", aspect: 2, caption: "Le château de Hirosaki et ses cerisiers", wiki: "hirosaki-castle", poi: "hirosaki", seed: 0 } }] },
             { span: 1, blocks: [{ t: "poi", id: "hirosaki" }] },
           ],
         },

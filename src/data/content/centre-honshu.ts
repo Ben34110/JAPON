@@ -108,7 +108,7 @@ export const centreHonshu: RegionContent = {
           stacks: [
             {
               span: 3,
-              blocks: [{ t: "figure", photo: { motif: "street", aspect: 3.4, caption: "Le château de Kanazawa et ses remparts", wiki: "kanazawa-castle", seed: 1 } }],
+              blocks: [{ t: "figure", photo: { motif: "street", aspect: 3.4, caption: "Le château de Kanazawa et ses remparts", wiki: "kanazawa-castle", poi: "kanazawa", seed: 1 } }],
             },
           ],
         },
@@ -117,7 +117,7 @@ export const centreHonshu: RegionContent = {
           stacks: [
             {
               span: 2,
-              blocks: [{ t: "figure", photo: { motif: "cherry", aspect: 1.5, caption: "La lanterne Kotoji, au jardin Kenroku-en", wiki: "kenrokuen", seed: 0 } }],
+              blocks: [{ t: "figure", photo: { motif: "cherry", aspect: 1.5, caption: "La lanterne Kotoji, au jardin Kenroku-en", wiki: "kenrokuen", poi: "kanazawa", seed: 0 } }],
             },
           ],
         },

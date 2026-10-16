@@ -137,7 +137,7 @@ export const ouestHonshu: RegionContent = {
         {
           stacks: [
             { span: 1, blocks: [{ t: "poi", id: "osaka" }] },
-            { span: 1, blocks: [{ t: "figure", photo: { motif: "skyline", aspect: 1.1, caption: "Dotonbori, la nuit", wiki: "dotonbori", seed: 1 } }, { t: "poi", id: "nara" }] },
+            { span: 1, blocks: [{ t: "figure", photo: { motif: "skyline", aspect: 1.1, caption: "Dotonbori, la nuit", wiki: "dotonbori", poi: "osaka", seed: 1 } }, { t: "poi", id: "nara" }] },
             { span: 1, blocks: [{ t: "poi", id: "himeji" }, { t: "figure", photo: { motif: "castle", aspect: 0.85, caption: "Le château d'Himeji, ou « héron blanc »", wiki: "himeji-castle", seed: 0 } }] },
           ],
         },

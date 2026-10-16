@@ -150,7 +150,7 @@ export const kyoto: RegionContent = {
           stacks: [
             { span: 1, blocks: [{ t: "poi", id: "kinkaku-ji" }] },
             { span: 1, blocks: [{ t: "poi", id: "nijo-jo" }] },
-            { span: 1, blocks: [{ t: "figure", photo: { motif: "gate", aspect: 1, caption: "Le Pavillon d'or se reflète dans l'étang", wiki: "kinkaku-ji", seed: 1 } }] },
+            { span: 1, blocks: [{ t: "figure", photo: { motif: "gate", aspect: 1, caption: "Le Pavillon d'or se reflète dans l'étang", wiki: "kinkaku-ji", poi: "kinkaku-ji", seed: 1 } }] },
           ],
         },
       ],
@@ -160,14 +160,20 @@ export const kyoto: RegionContent = {
         {
           stacks: [
             { span: 1, blocks: [{ t: "poi", id: "gion" }] },
-            { span: 1, blocks: [{ t: "figure", photo: { motif: "street", aspect: 0.85, caption: "Maisons de thé du quartier de Gion", wiki: "gion", seed: 0 } }, { t: "poi", id: "kiyomizu-dera" }] },
+            { span: 1, blocks: [{ t: "figure", photo: { motif: "street", aspect: 0.85, caption: "Maisons de thé du quartier de Gion", wiki: "gion", poi: "gion", seed: 0 } }, { t: "poi", id: "kiyomizu-dera" }] },
             { span: 1, blocks: [{ t: "poi", id: "fushimi-inari" }] },
           ],
         },
         {
           stacks: [
-            { span: 2, blocks: [{ t: "figure", photo: { motif: "torii", aspect: 2, caption: "Les portiques vermillon du Fushimi Inari-taisha", wiki: "fushimi-inari", seed: 0 } }] },
-            { span: 1, blocks: [{ t: "sidebar", id: "gion-jeux" }] },
+            { span: 2, blocks: [{ t: "figure", photo: { motif: "torii", aspect: 2, caption: "Les portiques vermillon du Fushimi Inari-taisha", wiki: "fushimi-inari", poi: "fushimi-inari", seed: 0 } }] },
+            { span: 1, blocks: [{ t: "sidebar", id: "gion-jeux", poi: "fushimi-inari" }] },
+          ],
+        },
+        {
+          stacks: [
+            { span: 1, blocks: [{ t: "figure", photo: { motif: "gate", aspect: 1.2, caption: "La porte Karamon du château de Nijo", seed: 0, wiki: "nijo-castle", poi: "nijo-jo" } }] },
+            { span: 1, blocks: [{ t: "figure", photo: { motif: "pagoda", aspect: 1.2, caption: "La terrasse du Kiyomizu-dera, au milieu des arbres", seed: 0, wiki: "kiyomizu-dera", poi: "kiyomizu-dera" } }] },
           ],
         },
         {
@@ -175,7 +181,7 @@ export const kyoto: RegionContent = {
             { span: 2, blocks: [{ t: "poi", id: "nara" }] },
             {
               span: 1,
-              blocks: [{ t: "figure", photo: { motif: "pagoda", aspect: 1, caption: "La grande salle du Todai-ji, à Nara", seed: 0, wiki: "todai-ji" } }],
+              blocks: [{ t: "figure", photo: { motif: "pagoda", aspect: 1, caption: "La grande salle du Todai-ji, à Nara", seed: 0, wiki: "todai-ji", poi: "nara" } }],
             },
           ],
         },

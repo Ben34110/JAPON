@@ -99,7 +99,7 @@ export const hokkaido: RegionContent = {
           ],
         },
         {
-          stacks: [{ span: 3, blocks: [{ t: "figure", photo: { motif: "mountain", aspect: 3.2, caption: "Sentier dans la péninsule de Shiretoko", wiki: "shiretoko", seed: 1 } }] }],
+          stacks: [{ span: 3, blocks: [{ t: "figure", photo: { motif: "mountain", aspect: 3.2, caption: "Sentier dans la péninsule de Shiretoko", wiki: "shiretoko", poi: "shiretoko", seed: 1 } }] }],
         },
       ],
     },

@@ -180,7 +180,7 @@ export const shikoku: RegionContent = {
           stacks: [
             {
               span: 3,
-              blocks: [{ t: "figure", photo: { motif: "sea", aspect: 2.6, caption: "Îles de la mer Intérieure, qui sépare Shikoku de Honshu et de Kyushu", wiki: "seto-inland-sea", seed: 2 } }],
+              blocks: [{ t: "figure", photo: { motif: "sea", aspect: 2.6, caption: "Îles de la mer Intérieure, qui sépare Shikoku de Honshu et de Kyushu", wiki: "seto-inland-sea", poi: "mer-interieure", seed: 2 } }],
             },
           ],
         },
@@ -195,7 +195,7 @@ export const shikoku: RegionContent = {
           stacks: [
             {
               span: 2,
-              blocks: [{ t: "figure", photo: { motif: "garden", aspect: 2.1, caption: "Le pont du Ritsurin Park s'intègre dans la composition du paysage", wiki: "ritsurin", seed: 0 } }],
+              blocks: [{ t: "figure", photo: { motif: "garden", aspect: 2.1, caption: "Le pont du Ritsurin Park s'intègre dans la composition du paysage", wiki: "ritsurin", poi: "takamatsu", seed: 0 } }],
             },
           ],
         },
@@ -208,10 +208,10 @@ export const shikoku: RegionContent = {
             {
               span: 1,
               blocks: [
-                { t: "figure", photo: { motif: "market", aspect: 1.2, caption: "Le sanctuaire Kotohira-gu, ou Kompira-san", wiki: "kotohira", seed: 1 } },
+                { t: "figure", photo: { motif: "market", aspect: 1.2, caption: "Le sanctuaire Kotohira-gu, ou Kompira-san", wiki: "kotohira", poi: "kotohira", seed: 1 } },
               ],
             },
-            { span: 2, blocks: [{ t: "sidebar", id: "awa-odori" }] },
+            { span: 2, blocks: [{ t: "sidebar", id: "awa-odori", poi: "tokushima" }] },
           ],
         },
         {
@@ -226,7 +226,7 @@ export const shikoku: RegionContent = {
             { span: 1, blocks: [{ t: "poi", id: "tokushima" }] },
             {
               span: 1,
-              blocks: [{ t: "figure", photo: { motif: "market", aspect: 0.85, caption: "Le détroit de Naruto, où naissent les tourbillons", wiki: "naruto", seed: 2 } }],
+              blocks: [{ t: "figure", photo: { motif: "market", aspect: 0.85, caption: "Le détroit de Naruto, où naissent les tourbillons", wiki: "naruto", poi: "naruto", seed: 2 } }],
             },
           ],
         },
@@ -237,7 +237,7 @@ export const shikoku: RegionContent = {
         {
           stacks: [
             { span: 2, blocks: [{ t: "poi", id: "matsuyama" }] },
-            { span: 1, blocks: [{ t: "figure", photo: { motif: "castle", aspect: 0.9, caption: "Dogo Onsen Honkan, à Matsuyama", wiki: "dogo-onsen", seed: 2 } }] },
+            { span: 1, blocks: [{ t: "figure", photo: { motif: "castle", aspect: 0.9, caption: "Dogo Onsen Honkan, à Matsuyama", wiki: "dogo-onsen", poi: "matsuyama", seed: 2 } }] },
           ],
         },
       ],

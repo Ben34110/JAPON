@@ -94,12 +94,12 @@ export const okinawa: RegionContent = {
           stacks: [
             { span: 1, blocks: [{ t: "poi", id: "naha" }] },
             { span: 1, blocks: [{ t: "figure", photo: { motif: "gate", aspect: 1, caption: "La porte Shureimon, château de Shuri", wiki: "shureimon", seed: 0 } }, { t: "poi", id: "shuri-jo" }] },
-            { span: 1, blocks: [{ t: "sidebar", id: "ryukyu" }] },
+            { span: 1, blocks: [{ t: "sidebar", id: "ryukyu", poi: "shuri-jo" }] },
           ],
         },
         {
           stacks: [
-            { span: 2, blocks: [{ t: "figure", photo: { motif: "reef", aspect: 2, caption: "Le château de Shuri, reconstruit après la guerre", wiki: "shuri-castle", seed: 0 } }] },
+            { span: 2, blocks: [{ t: "figure", photo: { motif: "reef", aspect: 2, caption: "Le château de Shuri, reconstruit après la guerre", wiki: "shuri-castle", poi: "shuri-jo", seed: 0 } }] },
             { span: 1, blocks: [{ t: "poi", id: "churaumi" }] },
           ],
         },

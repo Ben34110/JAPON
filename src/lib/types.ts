@@ -49,6 +49,8 @@ export interface PhotoSpec {
   seed?: number;
   /** clé d'une photographie Wikimedia Commons (voir src/data/photos.generated.ts) */
   wiki?: string;
+  /** lieu auquel la photo est rattachée (sinon : le lieu de sa pile) */
+  poi?: string;
 }
 
 export type AddressIcon =
@@ -130,7 +132,7 @@ export type Block =
   | { t: "intro" }
   | { t: "poi"; id: string }
   | { t: "figure"; photo: PhotoSpec }
-  | { t: "sidebar"; id: string }
+  | { t: "sidebar"; id: string; poi?: string }
   | { t: "howto"; title: string; paragraphs: string[] };
 
 export interface Stack {

@@ -261,7 +261,7 @@ export const kyushu: RegionContent = {
             },
           ],
         },
-        { stacks: [{ span: 3, blocks: [{ t: "sidebar", id: "nagasaki-etrangers" }] }] },
+        { stacks: [{ span: 3, blocks: [{ t: "sidebar", id: "nagasaki-etrangers", poi: "nagasaki" }] }] },
       ],
     },
     {
@@ -294,9 +294,9 @@ export const kyushu: RegionContent = {
             {
               span: 1,
               blocks: [
-                { t: "figure", photo: { motif: "volcano", aspect: 1.9, caption: "Sakurajima, le volcan qui domine la baie de Kagoshima", wiki: "sakurajima", seed: 2 } },
-                { t: "figure", photo: { motif: "volcano", aspect: 1, caption: "Le jardin Sengan-en, à Kagoshima", wiki: "sengan-en", seed: 2 } },
-                { t: "sidebar", id: "pays-du-feu" },
+                { t: "figure", photo: { motif: "volcano", aspect: 1.9, caption: "Sakurajima, le volcan qui domine la baie de Kagoshima", wiki: "sakurajima", poi: "kagoshima", seed: 2 } },
+                { t: "figure", photo: { motif: "volcano", aspect: 1, caption: "Le jardin Sengan-en, à Kagoshima", wiki: "sengan-en", poi: "kagoshima", seed: 2 } },
+                { t: "sidebar", id: "pays-du-feu", poi: "kagoshima" },
               ],
             },
           ],
