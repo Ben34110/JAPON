@@ -13,6 +13,8 @@ import { RichText } from "./RichText";
 const GAP = 28;
 /** une photo plus haute que cette part de la colonne passe sur sa propre page */
 const BIG_PHOTO_RATIO = 0.45;
+/** grossissement maximal du texte d'un lieu (ordinateur) */
+const MAX_ZOOM = 1.6;
 
 interface Props {
   region: Region;
@@ -43,6 +45,7 @@ export function RegionColumnsLayout({ region, content, activePoiId, nonce, sourc
   const segRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [size, setSize] = useState({ w: 0, h: 0 });
   const [segPages, setSegPages] = useState<number[]>([]);
+  const [segZoom, setSegZoom] = useState<number[]>([]);
   const [measured, setMeasured] = useState(0);
   const [pageRaw, setPage] = useState(0);
 
@@ -179,14 +182,38 @@ export function RegionColumnsLayout({ region, content, activePoiId, nonce, sourc
   const measure = useCallback(() => {
     if (!size.w) return;
     const s = size.w + GAP;
-    const next = segments.map((sg, i) => {
+    const grow = size.w >= 700; // ordinateur : le texte grossit pour combler les pages peu remplies
+    const zooms: number[] = [];
+    const pages: number[] = segments.map((sg, i) => {
+      zooms[i] = 1;
       if (sg.kind === "photo") return 1;
       const el = segRefs.current[i];
-      return el ? Math.max(1, Math.round((el.scrollWidth + GAP) / s)) : 1;
+      if (!el) return 1;
+      const apply = (z: number) => {
+        el.style.zoom = z === 1 ? "" : String(z);
+        el.style.width = `${size.w / z}px`;
+        el.style.height = `${size.h / z}px`;
+        el.style.columnGap = `${GAP / z}px`;
+        // largeur de colonne et pages, dans le repère (zoomé) de l'élément
+        return Math.max(1, Math.round((el.scrollWidth + GAP / z) / (size.w / z + GAP / z)));
+      };
+      const n0 = apply(1);
+      if (grow) {
+        let best = 1;
+        for (let z = 1.08; z <= MAX_ZOOM + 0.001; z += 0.08) {
+          if (apply(z) === n0) best = z;
+          else break;
+        }
+        apply(best);
+        zooms[i] = best;
+      }
+      return n0;
     });
-    setSegPages((prev) => (prev.length === next.length && prev.every((v, i) => v === next[i]) ? prev : next));
+    setSegPages((prev) => (prev.length === pages.length && prev.every((v, i) => v === pages[i]) ? prev : pages));
+    setSegZoom((prev) => (prev.length === zooms.length && prev.every((v, i) => v === zooms[i]) ? prev : zooms));
+    void s;
     setMeasured((m) => m + 1);
-  }, [size.w, segments]);
+  }, [size.w, size.h, segments]);
 
   useLayoutEffect(() => {
     measure();
@@ -330,7 +357,7 @@ export function RegionColumnsLayout({ region, content, activePoiId, nonce, sourc
                       segRefs.current[i] = el;
                     }}
                     className="gv-flow gv-prose"
-                    style={{ width: size.w, height: size.h, columnCount: cols, columnGap: GAP }}
+                    style={{ width: size.w / (segZoom[i] ?? 1), height: size.h / (segZoom[i] ?? 1), columnCount: cols, columnGap: GAP / (segZoom[i] ?? 1), zoom: segZoom[i] && segZoom[i] !== 1 ? segZoom[i] : undefined }}
                   >
                     {sg.blocks.map((b, bi) => renderBlock(b, `${sg.key}-${bi}`))}
                   </div>
