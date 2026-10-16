@@ -55,16 +55,23 @@ export function RegionColumnsLayout({ region, content, activePoiId, nonce, sourc
     content.pages.forEach((pg, pi) =>
       pg.bands.forEach((band, bi) =>
         band.stacks.forEach((st, si) => {
-          const blocks: Block[] = [];
+          // un groupe par site : figures qui précèdent le site, puis le site, puis ses figures/encadrés
+          let cur: Block[] = [];
+          let n = 0;
+          const close = () => {
+            if (cur.length) out.push({ key: `${pi}-${bi}-${si}-${n++}`, blocks: cur, hasPoi: cur.some((b) => b.t === "poi") });
+            cur = [];
+          };
           st.blocks.forEach((b) => {
             if (b.t === "intro") return;
             if (b.t === "howto") {
               howto = howto ?? { title: b.title, paragraphs: b.paragraphs };
               return;
             }
-            blocks.push(b);
+            if (b.t === "poi" && cur.some((x) => x.t === "poi")) close();
+            cur.push(b);
           });
-          if (blocks.length) out.push({ key: `${pi}-${bi}-${si}`, blocks, hasPoi: blocks.some((b) => b.t === "poi") });
+          close();
         }),
       ),
     );
@@ -89,6 +96,22 @@ export function RegionColumnsLayout({ region, content, activePoiId, nonce, sourc
   const measure = useCallback(() => {
     const flowEl = flowRef.current;
     if (!flowEl || !size.w) return;
+    // chaque site démarre sur une nouvelle page : on comble les colonnes restantes de la page précédente
+    flowEl.querySelectorAll(".gv-fill").forEach((n) => n.remove());
+    const colStep = (size.w - (cols - 1) * GAP) / cols + GAP;
+    const base = flowEl.getBoundingClientRect().left;
+    flowEl.querySelectorAll<HTMLElement>("[data-newpage]").forEach((g) => {
+      const c = Math.round((g.getBoundingClientRect().left - base) / colStep) % cols;
+      if (c !== 0) {
+        for (let i = 0; i < cols - c; i++) {
+          const f = document.createElement("div");
+          f.className = "gv-fill";
+          f.setAttribute("aria-hidden", "true");
+          f.style.cssText = "break-before:column;height:1px;margin:0";
+          g.before(f);
+        }
+      }
+    });
     const s = size.w + GAP;
     setFlowPages(Math.max(1, Math.round((flowEl.scrollWidth + GAP) / s)));
     const fr0 = flowEl.getBoundingClientRect().left;
@@ -99,7 +122,7 @@ export function RegionColumnsLayout({ region, content, activePoiId, nonce, sourc
     });
     setPoiPage(map);
     setMeasured((m) => m + 1);
-  }, [size.w]);
+  }, [size.w, cols]);
 
   useLayoutEffect(() => {
     measure();
@@ -116,7 +139,26 @@ export function RegionColumnsLayout({ region, content, activePoiId, nonce, sourc
     };
   }, [measure, size.h]);
 
-  const goto = useCallback((p: number) => setPage(Math.min(Math.max(0, p), Math.max(0, total - 1))), [total]);
+  /** Tourner la page à la main : le lieu affiché devient le site actif (surbrillance sur la carte). */
+  const turn = useCallback(
+    (p: number) => {
+      const target = Math.min(Math.max(0, p), Math.max(0, total - 1));
+      setPage(target);
+      if (target === 0) return;
+      let best: string | null = null;
+      let bestPage = -1;
+      for (const poi of content.pois) {
+        const pg = poiPageRef.current[poi.id];
+        if (pg != null && pg <= target && pg >= bestPage) {
+          best = poi.id;
+          bestPage = pg;
+        }
+      }
+      if (best && best !== activePoiId) onSelectPoi(best);
+    },
+    [total, content.pois, activePoiId, onSelectPoi],
+  );
+  const goto = turn;
 
   // carte / visite → on tourne vers la page du site actif
   useEffect(() => {
@@ -131,12 +173,12 @@ export function RegionColumnsLayout({ region, content, activePoiId, nonce, sourc
     if (tourMode) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLElement && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
-      if (e.key === "ArrowRight" || e.key === "PageDown") setPage((p) => Math.min(total - 1, p + 1));
-      else if (e.key === "ArrowLeft" || e.key === "PageUp") setPage((p) => Math.max(0, p - 1));
+      if (e.key === "ArrowRight" || e.key === "PageDown") turn(page + 1);
+      else if (e.key === "ArrowLeft" || e.key === "PageUp") turn(page - 1);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [tourMode, total]);
+  }, [tourMode, page, turn]);
 
   const touchX = useRef<number | null>(null);
 
@@ -187,7 +229,7 @@ export function RegionColumnsLayout({ region, content, activePoiId, nonce, sourc
           if (touchX.current == null) return;
           const dx = e.clientX - touchX.current;
           touchX.current = null;
-          if (Math.abs(dx) > 60) setPage((p) => Math.min(total - 1, Math.max(0, p + (dx < 0 ? 1 : -1))));
+          if (Math.abs(dx) > 60) turn(page + (dx < 0 ? 1 : -1));
         }}
       >
         {size.w > 0 && (
@@ -213,7 +255,7 @@ export function RegionColumnsLayout({ region, content, activePoiId, nonce, sourc
               style={{ width: size.w, height: size.h, flex: "none", columnCount: cols, columnGap: GAP }}
             >
               {groups.map((g, gi) => (
-                <div key={g.key} className={g.hasPoi && gi > 0 ? "gv-group gv-newcol" : "gv-group"}>
+                <div key={g.key} className={g.hasPoi && gi > 0 ? "gv-group gv-newcol" : "gv-group"} data-newpage={g.hasPoi && gi > 0 ? "" : undefined}>
                   {g.blocks.map((block, bi) => {
                     const key = `${g.key}-${bi}`;
                     switch (block.t) {
@@ -249,7 +291,7 @@ export function RegionColumnsLayout({ region, content, activePoiId, nonce, sourc
       <footer className="gv-pager" aria-label="Pagination">
         {!tourMode && (
           <>
-            <button type="button" onClick={() => setPage((p) => Math.max(0, p - 1))} disabled={page === 0} aria-label="Page précédente">
+            <button type="button" onClick={() => turn(page - 1)} disabled={page === 0} aria-label="Page précédente">
               <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
                 <path d="M9 2 4 7l5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -269,14 +311,14 @@ export function RegionColumnsLayout({ region, content, activePoiId, nonce, sourc
                     aria-selected={i === page}
                     aria-label={i === 0 ? "Page explicative" : `Page ${content.startFolio + i}`}
                     title={i === 0 ? "Page explicative" : `Page ${content.startFolio + i}`}
-                    onClick={() => setPage(i)}
+                    onClick={() => turn(i)}
                     className="gv-dot"
                     data-on={i === page ? "true" : undefined}
                   />
                 ))}
               </div>
             )}
-            <button type="button" onClick={() => setPage((p) => Math.min(total - 1, p + 1))} disabled={page >= total - 1} aria-label="Page suivante">
+            <button type="button" onClick={() => turn(page + 1)} disabled={page >= total - 1} aria-label="Page suivante">
               <span className="whitespace-nowrap max-[1100px]:hidden">Page suivante</span>
               <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
                 <path d="M5 2l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

@@ -145,6 +145,7 @@ export function MapCanvas({
                 style={{ cursor: "pointer", outline: "none" }}
               >
                 <title>{fr(p.name)}</title>
+                {isActive && <circle r="40" fill={color} opacity="0.22" />}
                 {isActive && <circle r="24" fill={color} className="gv-pulse" style={{ transformBox: "fill-box", transformOrigin: "center", animation: "gv-pulse 1.9s ease-out infinite" }} />}
                 <circle r={cluster ? 25 : isActive ? 24 : 18} fill={isActive ? color : cluster ? "#fff" : "#111"} stroke={isActive || cluster ? "#111" : "#fff"} strokeWidth={cluster ? 3.4 : isActive ? 3.2 : 2.6} style={{ transition: "fill 0.3s" }} />
                 <text
