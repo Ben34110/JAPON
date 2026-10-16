@@ -26,7 +26,7 @@ export function PointOfInterestItem({ poi, active, onSelect }: Props) {
         <header className="gv-poi-head" style={{ breakAfter: "avoid" }}>
           <button
             type="button"
-            className="gv-poi-title"
+            className="gv-poi-title max-md:my-[-10px] max-md:py-[10px]"
             onClick={() => onSelect(poi.id)}
             aria-label={`${poi.name}, repère ${poi.marker} : afficher sur la carte`}
           >

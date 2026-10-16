@@ -59,14 +59,14 @@ export function RegionPreviewCard({ regionId, onExplore }: { regionId: RegionId;
       </div>
 
       <div className="relative mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-[#111] pt-2">
-        <ul className="m-0 flex min-w-0 flex-1 list-none flex-wrap gap-x-3 gap-y-0 p-0">
-          {content.pois.slice(0, 4).map((p) => (
+        <ul className="m-0 flex min-w-0 flex-1 list-none flex-wrap gap-x-3 gap-y-0 p-0 max-md:basis-full">
+          {content.pois.slice(0, 3).map((p) => (
             <li key={p.id} className="f-garamond flex items-center gap-1 text-[14.5px] leading-[1.45]">
               {fr(p.name)} <Badge n={p.marker} />
             </li>
           ))}
         </ul>
-        <button type="button" className="gv-btn shrink-0" onClick={() => onExplore(regionId)}>
+        <button type="button" className="gv-btn shrink-0 max-md:w-full max-md:justify-center max-md:!py-3" onClick={() => onExplore(regionId)}>
           Explorer la région
           <svg width="16" height="10" viewBox="0 0 16 10" aria-hidden="true">
             <path d="M0 5h14M10 1l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />

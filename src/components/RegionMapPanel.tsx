@@ -17,6 +17,9 @@ interface Props {
   activePoiId: string | null;
   tourMode: boolean;
   onPinClick: (poiId: string) => void;
+  /** téléphone : carte agrandie / repliée */
+  mapExpanded?: boolean;
+  onToggleMapSize?: () => void;
 }
 
 /** « wide » = carte régionale ; sinon clé d'un plan de quartier (tokyo-centre, kyoto…). */
@@ -42,7 +45,7 @@ function planOf(regionId: string, poi: Poi | undefined): string | null {
  * et liste « Les sites d'un coup d'œil ». Synchronisée avec la colonne de texte.
  * Tokyo : carte large + un plan par secteur (Centre, Nord, Ouest). Kyoto : carte large + plan de la ville.
  */
-export function RegionMapPanel({ region, content, activePoiId, tourMode, onPinClick }: Props) {
+export function RegionMapPanel({ region, content, activePoiId, tourMode, onPinClick, mapExpanded = false, onToggleMapSize }: Props) {
   const [manualZoom, setManualZoom] = useState(false);
   const [viewPref, setViewPref] = useState<View>("wide");
 
@@ -127,7 +130,7 @@ export function RegionMapPanel({ region, content, activePoiId, tourMode, onPinCl
 
   const overlay = (vb: ViewBox) => (
     <>
-      <div className="pointer-events-none absolute left-2 top-2 opacity-95" aria-hidden="true">
+      <div className="pointer-events-none absolute left-2 top-2 opacity-95 max-md:hidden" aria-hidden="true">
         <Compass size={58} />
       </div>
       <div className="pointer-events-none absolute bottom-2 left-3 right-3 flex items-end justify-between">
@@ -138,7 +141,7 @@ export function RegionMapPanel({ region, content, activePoiId, tourMode, onPinCl
       </div>
       <button
         type="button"
-        className="gv-btn ghost absolute right-2 top-2 !px-2.5 !py-1.5 !text-[11px] !tracking-[0.12em] bg-[var(--paper)]"
+        className="gv-btn ghost absolute right-2 top-2 !px-2.5 !py-1.5 !text-[11px] !tracking-[0.12em] bg-[var(--paper)] max-md:!min-h-[44px]"
         onClick={() => setManualZoom((z) => !z)}
         aria-pressed={zoom}
         disabled={tourMode}
@@ -146,6 +149,16 @@ export function RegionMapPanel({ region, content, activePoiId, tourMode, onPinCl
       >
         {zoom ? "Vue d'ensemble" : "Zoom sur le site"}
       </button>
+      {onToggleMapSize && (
+        <button
+          type="button"
+          onClick={onToggleMapSize}
+          aria-pressed={mapExpanded}
+          className="gv-btn gv-mobile-only absolute bottom-2 right-2 !min-h-[44px] !px-3 !py-1.5 !text-[11px]"
+        >
+          {mapExpanded ? "Réduire la carte" : "Agrandir la carte"}
+        </button>
+      )}
     </>
   );
 
@@ -155,14 +168,14 @@ export function RegionMapPanel({ region, content, activePoiId, tourMode, onPinCl
   const tabs = hasPlans ? [{ key: "wide", label: "Carte" }, ...planKeys] : [];
 
   return (
-    <div className="gv-frame flex min-h-0 flex-col max-md:h-full" style={{ "--region": region.color, "--on-region": region.onColor } as CSSProperties}>
-      <div className="mb-2 flex shrink-0 items-baseline justify-between gap-3">
+    <div className="gv-frame gv-frame-lite flex min-h-0 flex-col max-md:h-full" style={{ "--region": region.color, "--on-region": region.onColor } as CSSProperties}>
+      <div className="mb-2 flex shrink-0 items-baseline justify-between gap-3 max-md:hidden">
         <h2 className="f-garamond m-0 text-[19px] font-semibold leading-none">{fr(title)}</h2>
         <span className="f-didone text-[9px] uppercase tracking-[0.3em] text-[#4a4742]">{isPlan ? "Plan" : "Carte"}</span>
       </div>
 
       {hasPlans && (
-        <div className="mb-2 flex shrink-0" role="group" aria-label="Échelle de la carte">
+        <div className="mb-2 flex shrink-0 max-md:mb-1.5 max-md:overflow-x-auto max-md:[scrollbar-width:none]" role="group" aria-label="Échelle de la carte">
           {tabs.map((t) => (
             <button
               key={t.key}
@@ -170,7 +183,7 @@ export function RegionMapPanel({ region, content, activePoiId, tourMode, onPinCl
               aria-pressed={view === t.key}
               disabled={tourMode}
               onClick={() => setViewPref(t.key)}
-              className="f-gothic -ml-px flex-1 border border-[#111] px-2 py-1 text-[11px] font-bold uppercase tracking-[0.1em] transition-colors first:ml-0 disabled:cursor-default"
+              className="f-gothic -ml-px flex-1 border border-[#111] px-2 py-1 text-[11px] max-md:min-h-[38px] max-md:shrink-0 max-md:px-4 font-bold uppercase tracking-[0.1em] transition-colors first:ml-0 disabled:cursor-default"
               style={view === t.key ? { background: "#111", color: "#fff" } : { background: "transparent" }}
               title={tourMode ? "La vue suit la visite guidée" : undefined}
             >
@@ -180,7 +193,7 @@ export function RegionMapPanel({ region, content, activePoiId, tourMode, onPinCl
         </div>
       )}
 
-      <div className="mx-auto min-h-0 w-full max-md:flex-1 md:aspect-square md:w-[min(100%,calc(100dvh-var(--map-reserve)))]">
+      <div className="mx-auto min-h-0 w-full max-md:h-[var(--map-h,25dvh)] max-md:flex-none md:aspect-square md:w-[min(100%,calc(100dvh-var(--map-reserve)))]">
         <MapCanvas
           key={view}
           size={[1000, 1000]}

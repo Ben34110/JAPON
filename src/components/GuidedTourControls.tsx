@@ -29,7 +29,7 @@ export function GuidedTourControls({ steps, index, onPrev, onNext, onGoto, onExi
   const last = index === steps.length - 1;
   return (
     <>
-      <div className="gv-rise absolute inset-x-3 bottom-2 z-30 border border-[#111] bg-[var(--paper)] px-3 py-1.5 shadow-[0_10px_24px_-12px_rgba(0,0,0,0.55)]" role="region" aria-label="Visite guidée" aria-live="polite">
+      <div className="gv-rise absolute inset-x-3 bottom-2 z-30 max-md:inset-x-1.5 max-md:bottom-1 max-md:px-2 border border-[#111] bg-[var(--paper)] px-3 py-1.5 shadow-[0_10px_24px_-12px_rgba(0,0,0,0.55)]" role="region" aria-label="Visite guidée" aria-live="polite">
         <span className="pointer-events-none absolute inset-[3px] border-[0.5px] border-[#1119]" aria-hidden="true" />
         <div className="relative flex items-center gap-3">
           <div className="min-w-[38%] flex-1">

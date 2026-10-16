@@ -31,15 +31,22 @@ export function ChapterOpener({ region, content, folioOf, howto, onJump, onStart
         .filter((g) => g.pois.length)
     : [{ id: "all", name: "", short: "", pages: undefined as [number, number] | undefined, pois: content.pois }];
   return (
-    <div className="gv-opener flex h-full min-h-0 flex-col gap-3 overflow-hidden" style={{ "--region": region.color, "--on-region": region.onColor } as CSSProperties}>
+    <div className="gv-opener flex h-full min-h-0 flex-col gap-3 max-md:overflow-y-auto md:overflow-hidden" style={{ "--region": region.color, "--on-region": region.onColor } as CSSProperties}>
+      <div className="shrink-0 border border-[#111] bg-white p-[2px] md:hidden">
+        <div className="p-[5px]" style={{ background: region.color }}>
+          <div className="border border-white/80 leading-[0]">
+            <PhotoPlaceholder spec={{ ...region.photo, aspect: 3.4 }} label={`Photographie : ${region.name}`} />
+          </div>
+        </div>
+      </div>
       <div className="gv-chapter-title shrink-0">
         <h1>{fr(intro.title)}</h1>
         <span className="orn" aria-hidden="true" />
       </div>
 
-      <div className="grid min-h-0 flex-1 gap-5 md:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
-        <div className="flex min-h-0 flex-col gap-3">
-          <div className="gv-prose gv-opener-text min-h-0 overflow-hidden">
+      <div className="grid min-h-0 flex-1 gap-5 max-md:flex-none md:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
+        <div className="flex min-h-0 flex-col gap-3 max-md:min-h-fit">
+          <div className="gv-prose gv-opener-text min-h-0 max-md:shrink-0 md:overflow-hidden">
             {intro.paragraphs.map((p, i) => (
               <p key={i} className={i === 0 ? "gv-dropcap" : undefined}>
                 <RichText text={p} />
@@ -47,7 +54,7 @@ export function ChapterOpener({ region, content, folioOf, howto, onJump, onStart
             ))}
           </div>
           {howto && (
-            <section className="gv-howto gv-opener-howto mt-auto shrink-0">
+            <section className="gv-howto gv-opener-howto mt-auto shrink-0 max-md:mt-0">
               <h3>{fr(howto.title)}</h3>
               <div className="gv-prose">
                 {howto.paragraphs.map((p, i) => (
@@ -74,8 +81,8 @@ export function ChapterOpener({ region, content, folioOf, howto, onJump, onStart
         </figure>
       </div>
 
-      <section className="shrink-0 border-t border-[#111] pt-2" aria-label="Sommaire du chapitre">
-        <div className="f-didone mb-1 text-[9.5px] uppercase tracking-[0.28em] text-[#3b3935]">Les sites d’un coup d’œil</div>
+      <section className="shrink-0 border-t border-[#111] pt-2 max-md:contents" aria-label="Sommaire du chapitre">
+        <div className="f-didone mb-1 text-[9.5px] uppercase tracking-[0.28em] text-[#3b3935] max-md:mt-1 max-md:border-t max-md:border-[#111] max-md:pt-2">Les sites d’un coup d’œil</div>
         <div className={`grid gap-x-5 ${groups.length > 3 ? "sm:grid-cols-4" : groups.length > 1 ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
           {groups.map((g) => (
             <div key={g.id} className="min-w-0">
@@ -100,7 +107,7 @@ export function ChapterOpener({ region, content, folioOf, howto, onJump, onStart
             </div>
           ))}
         </div>
-        <div className="mt-2.5 flex flex-wrap items-center gap-2.5">
+        <div className="gv-opener-cta mt-2.5 flex flex-wrap items-center gap-2.5 max-md:sticky max-md:bottom-0 max-md:z-[2] max-md:mt-1.5 max-md:flex-nowrap max-md:border-t max-md:border-[#111] max-md:bg-[var(--paper)] max-md:pb-0.5 max-md:pt-2">
           <button type="button" className="gv-btn" onClick={onStart}>
             Découvrir les sites
             <svg width="16" height="10" viewBox="0 0 16 10" aria-hidden="true">

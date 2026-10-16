@@ -6,6 +6,7 @@ import { useApp } from "@/state/app-state";
 import { ColorCodeFlap } from "./ColorCodeFlap";
 import { EyeLogo } from "./Icons";
 import { JapanMap } from "./JapanMap";
+import { MobileHome } from "./MobileHome";
 import { RegionPreviewCard } from "./RegionPreviewCard";
 import { SoundToggle } from "./SoundToggle";
 
@@ -16,7 +17,9 @@ export function HomeScreen() {
   const selectedId = state.previewId;
 
   return (
-    <div className="flex min-h-dvh flex-col md:h-dvh md:overflow-hidden">
+    <>
+    <MobileHome />
+    <div className="hidden min-h-dvh flex-col md:flex md:h-dvh md:overflow-hidden">
       {/* Bandeau noir de couverture */}
       <div className="gv-band relative shrink-0" role="banner">
         <span>Guides</span>
@@ -63,5 +66,6 @@ export function HomeScreen() {
         </footer>
       </div>
     </div>
+    </>
   );
 }

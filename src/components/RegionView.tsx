@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, type CSSProperties } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { CONTENT } from "@/data/content";
 import { REGIONS, REGION_BY_ID, pagesLabel } from "@/data/regions";
 import type { RegionId } from "@/lib/types";
@@ -17,6 +17,7 @@ export function RegionView({ regionId }: { regionId: RegionId }) {
   const { session, backToMap, openRegion, activatePoi, startTour, stopTour, step, goto } = useApp();
   const region = REGION_BY_ID[regionId];
   const content = CONTENT[regionId];
+  const [mapExpanded, setMapExpanded] = useState(false);
 
   const activePoiId = session?.activePoiId ?? null;
   const tourMode = session?.mode === "tour";
@@ -43,15 +44,16 @@ export function RegionView({ regionId }: { regionId: RegionId }) {
   const vars = { "--region": region.color, "--on-region": region.onColor } as CSSProperties;
 
   return (
-    <div style={vars} data-mode={tourMode ? "tour" : "free"} className="flex h-dvh flex-col overflow-hidden">
+    <div style={vars} data-mode={tourMode ? "tour" : "free"} className="flex h-dvh flex-col overflow-hidden pb-[env(safe-area-inset-bottom)]">
       {/* Bandeau noir, comme le dos du guide */}
       <header className="shrink-0" style={{ background: "#0b0b0b", color: "#fff" }}>
         <div className="mx-auto flex max-w-[1500px] items-center gap-3 px-3 py-2 sm:px-5">
-          <button type="button" onClick={backToMap} className="f-gothic group flex items-center gap-2 border border-white/40 px-3 py-1.5 text-[12px] font-bold uppercase tracking-[0.14em] transition-colors hover:bg-white hover:text-black" aria-label="Retour à la carte générale">
+          <button type="button" onClick={backToMap} className="f-gothic group flex min-h-[44px] items-center gap-2 border border-white/40 px-3 py-1.5 text-[12px] font-bold uppercase tracking-[0.14em] transition-colors hover:bg-white hover:text-black" aria-label="Retour à la carte générale">
             <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
               <path d="M9 2 4 7l5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            <span className="max-sm:hidden">Retour à la carte générale</span>
+            <span className="max-sm:hidden max-[1000px]:hidden min-[1001px]:inline">Retour à la carte générale</span>
+            <span className="hidden min-[640px]:max-[1000px]:inline">Carte générale</span>
             <span className="sm:hidden">Carte</span>
           </button>
 
@@ -60,8 +62,8 @@ export function RegionView({ regionId }: { regionId: RegionId }) {
               <EyeLogo size={13} />
             </span>
             <span className="inline-block h-3 w-3 shrink-0" style={{ background: region.color }} aria-hidden="true" />
-            <span className="gv-collection truncate text-[12px] tracking-[0.24em] sm:text-[13px]">{fr(region.name)}</span>
-            <span className="f-garamond hidden text-[12px] italic text-white/70 sm:inline">{pagesLabel(region)}</span>
+            <span className="gv-collection truncate text-[12px] tracking-[0.2em] sm:text-[13px]">{fr(region.name)}</span>
+            <span className="f-garamond hidden text-[12px] italic text-white/70 xl:inline">{pagesLabel(region)}</span>
           </div>
 
           <SoundToggle className="shrink-0" />
@@ -80,7 +82,7 @@ export function RegionView({ regionId }: { regionId: RegionId }) {
               type="button"
               onClick={tourMode ? stopTour : startTour}
               aria-pressed={tourMode}
-              className="f-gothic border px-3 py-1.5 text-[12px] font-bold uppercase tracking-[0.12em] transition-colors sm:-ml-px"
+              className="f-gothic min-h-[44px] border px-3 py-1.5 text-[12px] font-bold uppercase tracking-[0.12em] transition-colors sm:-ml-px"
               style={tourMode ? { background: region.color, color: region.onColor, borderColor: region.color } : { borderColor: "#ffffffcc" }}
             >
               {tourMode ? "Quitter la visite" : "Lancer la visite"}
@@ -90,14 +92,16 @@ export function RegionView({ regionId }: { regionId: RegionId }) {
         <div style={{ height: 4, background: region.color }} />
       </header>
 
-      <div className="mx-auto grid min-h-0 w-full max-w-[1500px] flex-1 gap-4 px-3 py-3 max-md:grid-rows-[minmax(0,34dvh)_minmax(0,1fr)] sm:px-5 md:grid-cols-[minmax(360px,0.78fr)_minmax(0,1.3fr)] md:grid-rows-[minmax(0,1fr)] md:gap-8 md:py-4">
-        <aside className="min-h-0 md:self-start">
+      <div className="mx-auto grid min-h-0 w-full max-w-[1500px] flex-1 gap-4 px-3 py-3 max-md:grid-rows-[auto_minmax(0,1fr)] sm:px-5 md:grid-cols-[minmax(360px,0.78fr)_minmax(0,1.3fr)] md:grid-rows-[minmax(0,1fr)] md:gap-8 md:py-4">
+        <aside className="min-h-0 md:self-start" style={{ "--map-h": mapExpanded ? "46dvh" : "24dvh" } as CSSProperties}>
           <RegionMapPanel
             region={region}
             content={content}
             activePoiId={activePoiId}
             tourMode={tourMode}
             onPinClick={(id) => activatePoi(id, "map")}
+            mapExpanded={mapExpanded}
+            onToggleMapSize={() => setMapExpanded((v) => !v)}
           />
         </aside>
 

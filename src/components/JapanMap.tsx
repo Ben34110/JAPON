@@ -13,6 +13,8 @@ interface Props {
   onSelect: (id: RegionId) => void;
   onHover: (id: RegionId | null) => void;
   className?: string;
+  /** téléphone : libellés plus grands, pas de noms de villes, zones tactiles élargies */
+  compact?: boolean;
 }
 
 const [W, H] = HOME_MAP.viewBox;
@@ -52,7 +54,8 @@ const SEAS: { text: string; lonLat: [number, number]; rotate?: number }[] = [
   { text: "Mer de Chine orientale", lonLat: [128.0, 32.2], rotate: -62 },
 ];
 
-export function JapanMap({ selectedId, hoverId, onSelect, onHover, className = "block h-auto w-full" }: Props) {
+export function JapanMap({ selectedId, hoverId, onSelect, onHover, className = "block h-auto w-full", compact = false }: Props) {
+  const m = compact ? 1.4 : 1;
   const uid = useId().replace(/:/g, "");
   const order = selectedId ? [...DRAW_ORDER.filter((r) => r !== selectedId), selectedId] : DRAW_ORDER;
   const oki = HOME_MAP.okinawa;
@@ -153,8 +156,9 @@ export function JapanMap({ selectedId, hoverId, onSelect, onHover, className = "
         const left = false;
         return (
           <g key={id} style={{ pointerEvents: "none" }}>
+            {compact && <circle cx={cx} cy={cy} r={42} fill="transparent" style={{ pointerEvents: "all", cursor: "pointer" }} onClick={() => onSelect(id)} />}
             <circle cx={cx} cy={cy} r={selectedId === id ? 9 : 7} fill={meta.color} stroke="#111" strokeWidth="1.6" />
-            <text x={cx + (id === "kyoto" ? 4 : 13)} y={cy + (id === "kyoto" ? -14 : 5)} textAnchor={left ? "end" : "start"} fontSize="16" letterSpacing="2" style={{ fontFamily: "var(--font-garamond)", fontWeight: 600, textTransform: "uppercase", paintOrder: "stroke", stroke: "#fff", strokeWidth: 4, strokeLinejoin: "round" }} fill="#111">
+            <text x={cx + (id === "kyoto" ? 4 : 13)} y={cy + (id === "kyoto" ? -14 : 5)} textAnchor={left ? "end" : "start"} fontSize={16 * (compact ? 1.25 : 1)} letterSpacing="2" style={{ fontFamily: "var(--font-garamond)", fontWeight: 600, textTransform: "uppercase", paintOrder: "stroke", stroke: "#fff", strokeWidth: 4, strokeLinejoin: "round" }} fill="#111">
               {meta.name}
             </text>
           </g>
@@ -169,9 +173,9 @@ export function JapanMap({ selectedId, hoverId, onSelect, onHover, className = "
         const meta = REGION_BY_ID[id];
         const [cx, cy] = project(HOME_MAP.proj, l.lonLat);
         return (
-          <text key={id} textAnchor="middle" fontSize={l.size ?? 16} letterSpacing="1.6" fill={meta.onColor} style={{ fontFamily: "var(--font-garamond)", fontWeight: 600, pointerEvents: "none" }}>
+          <text key={id} textAnchor="middle" fontSize={(l.size ?? 16) * m} letterSpacing="1.6" fill={meta.onColor} style={{ fontFamily: "var(--font-garamond)", fontWeight: 600, pointerEvents: "none" }}>
             {l.lines.map((line, i) => (
-              <tspan key={i} x={cx} y={cy + (i - (l.lines.length - 1) / 2) * ((l.size ?? 16) * 1.18)} dy="0.35em">
+              <tspan key={i} x={cx} y={cy + (i - (l.lines.length - 1) / 2) * ((l.size ?? 16) * m * 1.18)} dy="0.35em">
                 {line}
               </tspan>
             ))}
@@ -180,7 +184,7 @@ export function JapanMap({ selectedId, hoverId, onSelect, onHover, className = "
       })}
 
       {/* villes */}
-      {CITIES.map((c) => {
+      {!compact && CITIES.map((c) => {
         const [x, y] = project(HOME_MAP.proj, c.lonLat);
         return (
           <g key={c.name} style={{ pointerEvents: "none" }}>

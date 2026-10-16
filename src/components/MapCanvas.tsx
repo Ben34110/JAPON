@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { fr } from "@/lib/typo";
 
 export interface MapPin {
@@ -96,6 +96,18 @@ export function MapCanvas({
   fit = false,
 }: Props) {
   const [W, H] = size;
+  const box = useRef<HTMLDivElement>(null);
+  const [px, setPx] = useState(0);
+  // pixels écran par unité de carte : sur téléphone la carte est petite, les repères doivent rester touchables
+  useLayoutEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    const read = () => setPx(Math.min(el.clientWidth / W, el.clientHeight / H));
+    read();
+    const ro = new ResizeObserver(read);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [W, H]);
   const isPinActive = (p: MapPin) => (p.memberIds ? !!activeId && p.memberIds.includes(activeId) : p.id === activeId);
   const active = pins.find(isPinActive) ?? null;
 
@@ -118,19 +130,20 @@ export function MapCanvas({
   const ordered = useMemo(() => [...pins].sort((a, b) => Number(isPinActive(a)) - Number(isPinActive(b))), [pins, activeId]);
 
   return (
-    <div className={`relative overflow-hidden ${fit ? "" : "w-full"} ${className}`} style={{ aspectRatio: `${W} / ${H}`, background: "#cfe9f1", ...(fit ? { width: "min(100cqw, 100cqh)" } : {}) }}>
+    <div ref={box} className={`relative overflow-hidden ${fit ? "" : "w-full"} ${className}`} style={{ aspectRatio: `${W} / ${H}`, background: "#cfe9f1", ...(fit ? { width: "min(100cqw, 100cqh)" } : {}) }}>
       <svg viewBox={`${vb.x} ${vb.y} ${vb.w} ${vb.h}`} className="absolute inset-0 h-full w-full" role="group" aria-label={ariaLabel} preserveAspectRatio="xMidYMid meet">
         <MapScaleCtx.Provider value={k}>
           {children}
           {ordered.map((p) => {
             const isActive = isPinActive(p);
+            const boost = px > 0 ? Math.min(2.6, Math.max(1, 9.5 / (18 * px))) : 1;
             const cluster = !!p.memberIds;
             const left = p.x > vb.x + vb.w * 0.66;
             return (
               <g
                 key={p.id}
                 className="gv-pin"
-                transform={`translate(${p.x} ${p.y}) scale(${k})`}
+                transform={`translate(${p.x} ${p.y}) scale(${k * boost})`}
                 role="button"
                 tabIndex={0}
                 aria-label={cluster ? `${p.name}, ${p.memberIds!.length} sites : afficher le plan` : `${p.name}, repère ${p.marker}`}
@@ -145,6 +158,7 @@ export function MapCanvas({
                 style={{ cursor: "pointer", outline: "none" }}
               >
                 <title>{fr(p.name)}</title>
+                <circle r={Math.max(26, 24 / Math.max(0.01, px * boost))} fill="transparent" />
                 {isActive && <circle r="40" fill={color} opacity="0.22" />}
                 {isActive && <circle r="24" fill={color} className="gv-pulse" style={{ transformBox: "fill-box", transformOrigin: "center", animation: "gv-pulse 1.9s ease-out infinite" }} />}
                 <circle r={cluster ? 25 : isActive ? 24 : 18} fill={isActive ? color : cluster ? "#fff" : "#111"} stroke={isActive || cluster ? "#111" : "#fff"} strokeWidth={cluster ? 3.4 : isActive ? 3.2 : 2.6} style={{ transition: "fill 0.3s" }} />

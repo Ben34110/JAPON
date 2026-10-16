@@ -17,7 +17,7 @@ export function SoundToggle({ className = "" }: { className?: string }) {
       aria-pressed={enabled}
       aria-label={enabled ? "Couper la musique d’ambiance" : "Activer la musique d’ambiance"}
       title={title}
-      className={`f-gothic flex items-center gap-2 border border-white/50 px-2.5 py-1.5 text-[12px] font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-white hover:text-black ${className}`}
+      className={`f-gothic flex min-h-[44px] min-w-[44px] items-center justify-center gap-2 border border-white/50 px-2.5 py-1.5 text-[12px] font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-white hover:text-black ${className}`}
     >
       <svg width="18" height="16" viewBox="0 0 18 16" aria-hidden="true">
         <path d="M2 6h3l4-3.5v11L5 10H2z" fill="currentColor" />

@@ -4,7 +4,7 @@ export const kyushu: RegionContent = {
   regionId: "kyushu",
   startFolio: 236,
   runningTitle: "Le Japon région par région",
-  sectionTitle: "Nagasaki",
+  sectionTitle: "Kyushu",
   mapTitle: "À la découverte de Kyushu",
   intro: {
     title: "Kyushu",
