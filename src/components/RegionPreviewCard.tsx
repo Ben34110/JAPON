@@ -18,7 +18,7 @@ export function RegionPreviewCard({ regionId, onExplore }: { regionId: RegionId;
   return (
     <article
       key={regionId}
-      className="gv-rise relative shrink-0 border border-[#111] bg-[var(--paper)] p-3"
+      className="gv-card gv-rise relative shrink-0 border border-[#111] bg-[var(--paper)] p-3"
       style={{ "--region": region.color, "--on-region": region.onColor } as CSSProperties}
       aria-live="polite"
     >

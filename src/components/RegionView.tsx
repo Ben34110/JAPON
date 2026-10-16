@@ -87,8 +87,8 @@ export function RegionView({ regionId }: { regionId: RegionId }) {
         <div style={{ height: 4, background: region.color }} />
       </header>
 
-      <div className="mx-auto grid min-h-0 w-full max-w-[1500px] flex-1 gap-4 px-3 py-3 max-lg:grid-rows-[minmax(0,34dvh)_minmax(0,1fr)] sm:px-5 lg:grid-cols-[minmax(360px,0.78fr)_minmax(0,1.3fr)] lg:grid-rows-[minmax(0,1fr)] lg:gap-8 lg:py-4">
-        <aside className="min-h-0 lg:self-start">
+      <div className="mx-auto grid min-h-0 w-full max-w-[1500px] flex-1 gap-4 px-3 py-3 max-md:grid-rows-[minmax(0,34dvh)_minmax(0,1fr)] sm:px-5 md:grid-cols-[minmax(360px,0.78fr)_minmax(0,1.3fr)] md:grid-rows-[minmax(0,1fr)] md:gap-8 md:py-4">
+        <aside className="min-h-0 md:self-start">
           <RegionMapPanel
             region={region}
             content={content}
@@ -98,7 +98,7 @@ export function RegionView({ regionId }: { regionId: RegionId }) {
           />
         </aside>
 
-        <main className="flex h-full min-h-0 min-w-0 flex-col max-lg:px-3 lg:pl-1 lg:pr-9">
+        <main className="flex h-full min-h-0 min-w-0 flex-col max-md:px-3 md:pl-1 md:pr-9">
           <RegionColumnsLayout
             key={regionId}
             region={region}
@@ -117,7 +117,7 @@ export function RegionView({ regionId }: { regionId: RegionId }) {
       </div>
 
       {/* Onglets de chapitre au bord de l'écran : on change de région sans perdre son état */}
-      <nav aria-label="Chapitres du guide" className="fixed right-0 top-1/3 z-30 hidden flex-col gap-[3px] lg:flex">
+      <nav aria-label="Chapitres du guide" className="fixed right-0 top-1/3 z-30 hidden flex-col gap-[3px] md:flex">
         {REGIONS.map((r) => {
           const on = r.id === regionId;
           return (

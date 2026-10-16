@@ -17,7 +17,7 @@ interface Props {
  */
 export function ColorCodeFlap({ selectedId, hoverId, onSelect, onHover }: Props) {
   return (
-    <section className="relative shrink-0 border border-[#111] bg-[var(--paper)] px-4 py-3" aria-labelledby="flap-title">
+    <section className="gv-flap relative shrink-0 border border-[#111] bg-[var(--paper)] px-4 py-3" aria-labelledby="flap-title">
       <span className="pointer-events-none absolute inset-[4px] border border-[#111]" aria-hidden="true" />
       <div className="relative">
         <div className="flex items-baseline justify-between gap-3">

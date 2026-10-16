@@ -31,7 +31,7 @@ export function ChapterOpener({ region, content, folioOf, howto, onJump, onStart
         .filter((g) => g.pois.length)
     : [{ id: "all", name: "", short: "", pages: undefined as [number, number] | undefined, pois: content.pois }];
   return (
-    <div className="flex h-full min-h-0 flex-col gap-3 overflow-y-auto pr-0.5 lg:overflow-hidden" style={{ "--region": region.color, "--on-region": region.onColor } as CSSProperties}>
+    <div className="gv-opener flex h-full min-h-0 flex-col gap-3 overflow-hidden" style={{ "--region": region.color, "--on-region": region.onColor } as CSSProperties}>
       <div className="gv-chapter-title shrink-0">
         <h1>{fr(intro.title)}</h1>
         <span className="orn" aria-hidden="true" />
@@ -39,7 +39,7 @@ export function ChapterOpener({ region, content, folioOf, howto, onJump, onStart
 
       <div className="grid min-h-0 flex-1 gap-5 md:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
         <div className="flex min-h-0 flex-col gap-3">
-          <div className="gv-prose gv-opener-text">
+          <div className="gv-prose gv-opener-text min-h-0 overflow-hidden">
             {intro.paragraphs.map((p, i) => (
               <p key={i} className={i === 0 ? "gv-dropcap" : undefined}>
                 <RichText text={p} />
@@ -47,7 +47,7 @@ export function ChapterOpener({ region, content, folioOf, howto, onJump, onStart
             ))}
           </div>
           {howto && (
-            <section className="gv-howto mt-auto shrink-0">
+            <section className="gv-howto gv-opener-howto mt-auto shrink-0">
               <h3>{fr(howto.title)}</h3>
               <div className="gv-prose">
                 {howto.paragraphs.map((p, i) => (
@@ -60,7 +60,7 @@ export function ChapterOpener({ region, content, folioOf, howto, onJump, onStart
           )}
         </div>
 
-        <figure className="m-0 flex min-h-0 flex-col max-md:hidden">
+        <figure className="gv-opener-fig m-0 flex min-h-0 flex-col max-md:hidden">
           <div className="flex min-h-0 flex-1 flex-col border border-[#111] bg-white p-[3px]">
             <div className="min-h-0 flex-1 p-[7px]" style={{ background: region.color }}>
               <div className="h-full border border-white/80 leading-[0]">
@@ -89,7 +89,7 @@ export function ChapterOpener({ region, content, folioOf, howto, onJump, onStart
                 {g.pois.map((p) => (
                   <li key={p.id}>
                     <button type="button" onClick={() => onJump(p.id)} className="gv-toc">
-                      <span className="f-garamond text-[15px] leading-[1.35]">{fr(p.name)}</span>
+                      <span className="gv-toc-name f-garamond leading-[1.3]">{fr(p.name)}</span>
                       <Badge n={p.marker} />
                       <span className="gv-toc-dots" aria-hidden="true" />
                       <span className="f-gothic text-[12px] italic">{folioOf[p.id] ?? ""}</span>
@@ -110,7 +110,7 @@ export function ChapterOpener({ region, content, folioOf, howto, onJump, onStart
           <button type="button" className="gv-btn ghost" onClick={onTour}>
             Lancer la visite
           </button>
-          <span className="f-body ml-auto text-[13px] italic text-[#4a4742]">{REGION_BY_ID[region.id].highlights.join(" · ")}</span>
+          <span className="gv-opener-hl f-body ml-auto text-[13px] italic text-[#4a4742]">{REGION_BY_ID[region.id].highlights.join(" · ")}</span>
         </div>
       </section>
     </div>

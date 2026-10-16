@@ -409,7 +409,7 @@ export const tokyo: RegionContent = {
         {
           stacks: [
             { span: 1, blocks: [
-              { t: "figure", photo: { motif: "castle", aspect: 1.1, caption: "Le Nijubashi et le Palais impérial", seed: 0, wiki: "imperial-palace" } },
+              { t: "figure", photo: { motif: "castle", aspect: 1.1, caption: "Le château d'Edo, devenu Palais impérial (peinture ancienne)", seed: 0, wiki: "imperial-palace" } },
               { t: "poi", id: "palais-imperial" },
             ] },
             { span: 1, blocks: [

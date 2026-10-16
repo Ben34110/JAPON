@@ -253,25 +253,31 @@ export function RegionColumnsLayout({ region, content, activePoiId, nonce, sourc
               <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
                 <path d="M9 2 4 7l5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              <span className="max-sm:hidden">Page précédente</span>
+              <span className="whitespace-nowrap max-[1100px]:hidden">Page précédente</span>
             </button>
-            <div className="flex items-center gap-1.5" role="tablist" aria-label="Pages du chapitre">
-              {Array.from({ length: total }, (_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  role="tab"
-                  aria-selected={i === page}
-                  aria-label={i === 0 ? "Page explicative" : `Page ${content.startFolio + i}`}
-                  title={i === 0 ? "Page explicative" : `Page ${content.startFolio + i}`}
-                  onClick={() => setPage(i)}
-                  className="gv-dot"
-                  data-on={i === page ? "true" : undefined}
-                />
-              ))}
-            </div>
+            {total > 12 ? (
+              <div className="f-gothic text-[12px] font-bold uppercase tracking-[0.14em]" aria-live="polite">
+                {page === 0 ? "Page explicative" : `Page ${folio}`} · {page + 1} / {total}
+              </div>
+            ) : (
+              <div className="flex items-center gap-1.5" role="tablist" aria-label="Pages du chapitre">
+                {Array.from({ length: total }, (_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    role="tab"
+                    aria-selected={i === page}
+                    aria-label={i === 0 ? "Page explicative" : `Page ${content.startFolio + i}`}
+                    title={i === 0 ? "Page explicative" : `Page ${content.startFolio + i}`}
+                    onClick={() => setPage(i)}
+                    className="gv-dot"
+                    data-on={i === page ? "true" : undefined}
+                  />
+                ))}
+              </div>
+            )}
             <button type="button" onClick={() => setPage((p) => Math.min(total - 1, p + 1))} disabled={page >= total - 1} aria-label="Page suivante">
-              <span className="max-sm:hidden">Page suivante</span>
+              <span className="whitespace-nowrap max-[1100px]:hidden">Page suivante</span>
               <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
                 <path d="M5 2l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>

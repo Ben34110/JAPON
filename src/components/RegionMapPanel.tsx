@@ -51,13 +51,18 @@ export function RegionMapPanel({ region, content, activePoiId, tourMode, onPinCl
   const hasPlans = planKeys.length > 0;
 
   const activePoi = content.pois.find((p) => p.id === activePoiId);
-  let view: View = hasPlans ? viewPref : "wide";
-  if (hasPlans && activePoi) {
-    const pk = planOf(region.id, activePoi);
-    // visite guidée : la vue suit le site (secteur → plan, excursion → carte large)
-    if (tourMode) view = pk ?? "wide";
-    else if (view !== "wide" && view !== pk) view = pk ?? "wide";
+
+  // quand le site actif change (clic carte / texte / visite), la vue suit : secteur → son plan,
+  // excursion → carte large. Ensuite, le choix d'un onglet par l'utilisateur reste prioritaire.
+  const [prevActive, setPrevActive] = useState<string | null>(activePoiId);
+  if (activePoiId !== prevActive) {
+    setPrevActive(activePoiId);
+    if (hasPlans && activePoi) setViewPref(planOf(region.id, activePoi) ?? "wide");
   }
+
+  let view: View = hasPlans ? viewPref : "wide";
+  // visite guidée : la vue est pilotée par l'étape (les onglets sont désactivés)
+  if (hasPlans && tourMode && activePoi) view = planOf(region.id, activePoi) ?? "wide";
   const plan = view !== "wide" ? PLANS[view] : null;
   const isPlan = !!plan;
 
@@ -150,7 +155,7 @@ export function RegionMapPanel({ region, content, activePoiId, tourMode, onPinCl
   const tabs = hasPlans ? [{ key: "wide", label: "Carte" }, ...planKeys] : [];
 
   return (
-    <div className="gv-frame flex min-h-0 flex-col max-lg:h-full" style={{ "--region": region.color, "--on-region": region.onColor } as CSSProperties}>
+    <div className="gv-frame flex min-h-0 flex-col max-md:h-full" style={{ "--region": region.color, "--on-region": region.onColor } as CSSProperties}>
       <div className="mb-2 flex shrink-0 items-baseline justify-between gap-3">
         <h2 className="f-garamond m-0 text-[19px] font-semibold leading-none">{fr(title)}</h2>
         <span className="f-didone text-[9px] uppercase tracking-[0.3em] text-[#4a4742]">{isPlan ? "Plan" : "Carte"}</span>
@@ -175,7 +180,7 @@ export function RegionMapPanel({ region, content, activePoiId, tourMode, onPinCl
         </div>
       )}
 
-      <div className="mx-auto min-h-0 w-full max-lg:flex-1 lg:aspect-square lg:w-[min(100%,calc(100dvh-400px))]">
+      <div className="mx-auto min-h-0 w-full max-md:flex-1 md:aspect-square md:w-[min(100%,calc(100dvh-var(--map-reserve)))]">
         <MapCanvas
           key={view}
           size={[1000, 1000]}
@@ -188,14 +193,14 @@ export function RegionMapPanel({ region, content, activePoiId, tourMode, onPinCl
           onPinClick={handlePin}
           ariaLabel={`${isPlan ? "Plan" : "Carte"} : ${region.name}`}
           overlay={overlay}
-          className="gv-rise border border-[#111] max-lg:aspect-auto! max-lg:h-full"
+          className="gv-rise border border-[#111] max-md:aspect-auto! max-md:h-full"
         >
           {plan ? <PlanBase plan={plan} /> : detail ? <GeoBase detail={detail} labels={content.mapLabels} /> : null}
         </MapCanvas>
       </div>
 
       {glancePois.length > 0 && (
-      <div className="gv-glance mt-3 shrink-0 max-lg:hidden">
+      <div className="gv-glance mt-3 shrink-0 max-md:hidden">
         <h3>{isPlan && content.pois.length > 10 ? `Les sites : ${plan?.title}` : "Les sites d’un coup d’œil"}</h3>
         <div className="grid grid-cols-1 gap-x-5 sm:grid-cols-2" role="list">
           {glancePois.map((p) => (
