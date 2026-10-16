@@ -4,6 +4,8 @@ import { makeImpulse, randBetween, schedulePhrase, startDrone, startNoise, strik
 interface Instance {
   id: string;
   bus: GainNode;
+  /** réverbération propre à l'ambiance : coupée avec elle (pas de « salle » qui continue) */
+  reverb: AudioNode[];
   nodes: AudioNode[];
   timers: number[];
   stopped: boolean;
@@ -20,7 +22,7 @@ const AudioCtor = (): ACtor | null =>
 class AmbientEngine {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
-  private reverbIn: ConvolverNode | null = null;
+  private impulse: AudioBuffer | null = null;
   private current: Instance | null = null;
   private volume = 0.7;
   private wanted: string | null = null;
@@ -37,16 +39,11 @@ class AmbientEngine {
       comp.ratio.value = 3;
       const master = ctx.createGain();
       master.gain.value = this.volume * 0.8;
-      const rev = ctx.createConvolver();
-      rev.buffer = makeImpulse(ctx);
-      const wet = ctx.createGain();
-      wet.gain.value = 0.75;
-      rev.connect(wet).connect(comp);
       master.connect(comp);
       comp.connect(ctx.destination);
       this.ctx = ctx;
       this.master = master;
-      this.reverbIn = rev;
+      this.impulse = makeImpulse(ctx);
       document.addEventListener("visibilitychange", () => {
         if (!this.ctx) return;
         if (document.hidden) void this.ctx.suspend();
@@ -75,14 +72,14 @@ class AmbientEngine {
   play(id: string | null) {
     this.wanted = id;
     if (!id) return this.fadeOut();
-    if (!this.ctx || !this.master || !this.reverbIn) return;
+    if (!this.ctx || !this.master || !this.impulse) return;
     if (this.ctx.state === "suspended") void this.ctx.resume();
     if (this.current?.id === id && !this.current.stopped) return;
     this.fadeOut();
     this.current = this.start(id);
   }
 
-  private fadeOut(seconds = 1.2) {
+  private fadeOut(seconds = 0.9) {
     const inst = this.current;
     const ctx = this.ctx;
     this.current = null;
@@ -102,8 +99,11 @@ class AmbientEngine {
         }
         n.disconnect();
       });
+      inst.reverb.forEach((n) => n.disconnect());
       inst.bus.disconnect();
       this.live--;
+      // plus rien ne doit sonner : on suspend le moteur audio
+      if (!this.current && !this.wanted && this.live === 0) void ctx.suspend();
     }, seconds * 1000 + 400);
   }
 
@@ -114,8 +114,13 @@ class AmbientEngine {
     bus.gain.setValueAtTime(0, ctx.currentTime);
     bus.gain.linearRampToValueAtTime(1, ctx.currentTime + 1.6);
     bus.connect(this.master!);
-    const out: Out = { ctx, dry: bus, send: this.reverbIn! };
-    const inst: Instance = { id: preset.id, bus, nodes: [], timers: [], stopped: false };
+    const rev = ctx.createConvolver();
+    rev.buffer = this.impulse!;
+    const wet = ctx.createGain();
+    wet.gain.value = 0.75;
+    rev.connect(wet).connect(bus);
+    const out: Out = { ctx, dry: bus, send: rev };
+    const inst: Instance = { id: preset.id, bus, reverb: [rev, wet], nodes: [], timers: [], stopped: false };
     this.live++;
     const t0 = ctx.currentTime + 0.05;
     if (preset.droneGain > 0) inst.nodes.push(...startDrone(out, preset, t0));
