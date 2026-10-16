@@ -81,7 +81,8 @@ function reducer(state: State, a: Action): State {
       return { ...state, screen: "region", regionId: a.id, previewId: a.id, sessions: { ...state.sessions, [a.id]: s } };
     }
     case "home":
-      return { ...state, screen: "home", previewId: state.regionId ?? state.previewId };
+      // retour à la carte générale : plus de région présélectionnée (la musique repasse au thème général)
+      return { ...state, screen: "home", previewId: null };
     case "activate":
       return withSession(state, (s, ids) => ({
         ...s,

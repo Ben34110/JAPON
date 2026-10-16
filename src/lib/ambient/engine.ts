@@ -14,7 +14,7 @@ const AudioCtor = (): ACtor | null =>
   typeof window === "undefined" ? null : (window.AudioContext ?? (window as unknown as { webkitAudioContext?: ACtor }).webkitAudioContext ?? null);
 
 /**
- * Moteur d'ambiance : une instance par ambiance (région), fondu enchaîné de 3 s entre deux ambiances.
+ * Moteur d'ambiance : une instance par ambiance (région), fondu enchaîné d'environ 1,5 s entre deux ambiances.
  * Le contexte audio n'est créé que depuis un geste de l'utilisateur (politique d'autoplay des navigateurs).
  */
 class AmbientEngine {
@@ -81,7 +81,7 @@ class AmbientEngine {
     this.current = this.start(id);
   }
 
-  private fadeOut(seconds = 2.4) {
+  private fadeOut(seconds = 1.4) {
     const inst = this.current;
     const ctx = this.ctx;
     this.current = null;
@@ -109,7 +109,7 @@ class AmbientEngine {
     const preset = trackFor(id);
     const bus = ctx.createGain();
     bus.gain.setValueAtTime(0, ctx.currentTime);
-    bus.gain.linearRampToValueAtTime(1, ctx.currentTime + 3);
+    bus.gain.linearRampToValueAtTime(1, ctx.currentTime + 1.6);
     bus.connect(this.master!);
     const out: Out = { ctx, dry: bus, send: this.reverbIn! };
     const inst: Instance = { id: preset.id, bus, nodes: [], timers: [], stopped: false };
