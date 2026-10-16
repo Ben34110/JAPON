@@ -1,26 +1,661 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------ *
+ *  Direction artistique « Guides Voir – Japon » (Hachette / DK)
+ *  Papier couché ivoire, filets noirs ultra-fins, code couleur par chapitre
+ * ------------------------------------------------------------------ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #f9f8f5;
+  --ink: #111111;
+  --ink-soft: #4a4742;
+  --frame-red: #d2232a;
+  --sea: #d7edf5;
+
+  --c-tokyo: #e60012;
+  --c-centre-honshu: #1e88e5;
+  --c-kyoto: #fbc02d;
+  --c-ouest-honshu: #2e7d32;
+  --c-shikoku: #fb8c00;
+  --c-kyushu: #e91e63;
+  --c-okinawa: #ff7043;
+  --c-nord-honshu: #8e24aa;
+  --c-hokkaido: #3949ab;
+
+  /* région courante (surchargée par style="--region: …") */
+  --region: var(--c-tokyo);
+  --on-region: #fff;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-didone: var(--ff-didone), "Bodoni 72", "Didot", "Bodoni MT", serif;
+  --font-garamond: var(--ff-garamond), "Adobe Garamond Pro", Garamond, serif;
+  --font-body: var(--ff-body), "Minion Pro", "Adobe Caslon Pro", Georgia, serif;
+  --font-gothic: var(--ff-gothic), "Franklin Gothic Medium Cond", "Arial Narrow", sans-serif;
+  --font-kanji: "Shippori Mincho", "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--paper);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.3;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-kerning: normal;
+  min-height: 100dvh;
 }
+
+/* grain très léger du papier couché */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.45  0 0 0 0 0.42  0 0 0 0 0.36  0 0 0 0.055 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+#__next, main, header, section, footer { position: relative; z-index: 1; }
+
+::selection { background: var(--region); color: var(--on-region); }
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+button { cursor: pointer; font: inherit; color: inherit; }
+
+/* ------------------------------------------------------------------ *
+ *  Familles typographiques
+ * ------------------------------------------------------------------ */
+.f-didone { font-family: var(--font-didone); }
+.f-garamond { font-family: var(--font-garamond); }
+.f-body { font-family: var(--font-body); }
+.f-gothic {
+  font-family: var(--font-gothic);
+  font-stretch: 75%;
+  font-variation-settings: "wdth" 75;
+}
+.f-kanji { font-family: var(--font-kanji); font-weight: 500; }
+
+.sc { font-variant-caps: small-caps; font-feature-settings: "smcp", "c2sc"; letter-spacing: 0.06em; }
+
+/* ------------------------------------------------------------------ *
+ *  Bandeau « GUIDES 👁 VOIR » (couverture / dos / rabat)
+ * ------------------------------------------------------------------ */
+.gv-band {
+  background: #0b0b0b;
+  color: #fff;
+  font-family: var(--font-didone);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9em;
+  padding: 11px 16px 10px;
+  border-bottom: 1px solid #000;
+}
+
+/* Titre « JAPON » : Didone rouge, filet noir et ombre extrudée */
+.gv-cover-title {
+  font-family: var(--font-didone);
+  font-weight: 500;
+  font-variation-settings: "opsz" 96;
+  color: #e4172b;
+  letter-spacing: -0.01em;
+  line-height: 0.9;
+  -webkit-text-stroke: 1.4px #111;
+  paint-order: stroke fill;
+  text-shadow: 1px 1px 0 #111, 2px 2px 0 #111, 3px 3px 0 #111, 4px 4px 0 #111;
+}
+
+/* Titre de collection / de section : Didone en capitales espacées */
+.gv-collection {
+  font-family: var(--font-didone);
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  font-weight: 400;
+}
+
+/* ------------------------------------------------------------------ *
+ *  Cadre « boussole » : tirets rouge et blanc
+ * ------------------------------------------------------------------ */
+.gv-frame {
+  --d: 6px;
+  position: relative;
+  padding: 16px;
+  background: var(--paper);
+}
+.gv-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  background:
+    repeating-linear-gradient(90deg, var(--frame-red) 0 13px, #fff 13px 26px) top / 100% var(--d) no-repeat,
+    repeating-linear-gradient(90deg, var(--frame-red) 0 13px, #fff 13px 26px) bottom / 100% var(--d) no-repeat,
+    repeating-linear-gradient(180deg, var(--frame-red) 0 13px, #fff 13px 26px) left / var(--d) 100% no-repeat,
+    repeating-linear-gradient(180deg, var(--frame-red) 0 13px, #fff 13px 26px) right / var(--d) 100% no-repeat;
+}
+.gv-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  box-shadow: 0 0 0 1px var(--frame-red);
+  border: 1px solid var(--frame-red);
+  outline: 1px solid var(--frame-red);
+  outline-offset: calc(var(--d) * -1 - 1px);
+}
+.gv-frame > * { position: relative; z-index: 1; }
+
+/* ------------------------------------------------------------------ *
+ *  Pastille numérotée (⓮ ⓯ …)
+ * ------------------------------------------------------------------ */
+.gv-badge {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 1.3em;
+  height: 1.3em;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--font-gothic);
+  font-stretch: 75%;
+  font-variation-settings: "wdth" 75;
+  font-weight: 700;
+  font-size: 0.72em;
+  line-height: 1;
+  letter-spacing: 0;
+  vertical-align: 0.18em;
+  transition: background-color 0.25s, color 0.25s, transform 0.25s;
+}
+.is-active > .gv-poi-head .gv-badge,
+.gv-badge[data-active="true"] {
+  background: var(--region);
+  color: var(--on-region);
+  transform: scale(1.12);
+}
+
+/* ------------------------------------------------------------------ *
+ *  Page du guide : en-tête, folio, onglet de chapitre
+ * ------------------------------------------------------------------ */
+.gv-sheet {
+  position: relative;
+  background: var(--paper);
+  border: 1px solid #1111;
+  box-shadow: 0 1px 0 #0001, 0 18px 30px -22px #0006, -1px 0 0 #fff inset;
+  padding: 18px 22px 26px;
+  container-type: inline-size;
+  container-name: page;
+}
+
+.gv-running {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  padding-bottom: 5px;
+  border-bottom: 2px dotted var(--ink);
+  margin-bottom: 14px;
+  font-family: var(--font-didone);
+  text-transform: uppercase;
+  letter-spacing: 0.34em;
+  font-size: 9.5px;
+  color: #3b3935;
+}
+.gv-running .folio {
+  font-family: var(--font-garamond);
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  font-size: 13px;
+  color: var(--ink);
+}
+.gv-running[data-side="right"] { flex-direction: row-reverse; }
+.gv-running .title { flex: 1; }
+
+/* Pastille de couleur au bord de la page (onglet de chapitre) */
+.gv-tab {
+  position: absolute;
+  top: 18px;
+  width: 38px;
+  height: 46px;
+  background: var(--region);
+  pointer-events: none;
+}
+.gv-tab[data-side="left"] {
+  left: -1px;
+  border-radius: 0 999px 999px 0;
+  transform: translateX(-62%);
+}
+.gv-tab[data-side="right"] {
+  right: -1px;
+  border-radius: 999px 0 0 999px;
+  transform: translateX(62%);
+}
+@media (max-width: 720px) {
+  .gv-tab[data-side="left"] { transform: translateX(-40%); width: 30px; height: 38px; }
+  .gv-tab[data-side="right"] { transform: translateX(40%); width: 30px; height: 38px; }
+}
+
+/* tranche du livre : liseré des 9 chapitres */
+.gv-edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-top: 12px;
+}
+.gv-edge i { display: block; width: 100%; height: 14px; opacity: 0.85; }
+.gv-edge i[data-on="true"] { height: 34px; opacity: 1; }
+
+/* ------------------------------------------------------------------ *
+ *  Grille éditoriale : trois colonnes, filets verticaux
+ * ------------------------------------------------------------------ */
+.gv-band-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: start;
+  margin-bottom: 18px;
+}
+.gv-stack {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+@container page (min-width: 440px) {
+  .gv-band-row { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 0; row-gap: 16px; }
+  .gv-band-row > .gv-stack[data-span="3"],
+  .gv-band-row > .gv-stack[data-span="2"] { grid-column: 1 / -1; }
+  .gv-band-row[data-template^="1-1"] > .gv-stack:nth-child(2) { border-left: 1px solid var(--ink); padding-left: 14px; }
+  .gv-band-row[data-template^="1-1"] > .gv-stack:nth-child(1) { padding-right: 14px; }
+}
+@container page (min-width: 640px) {
+  .gv-band-row { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 0; }
+  .gv-band-row > .gv-stack { border-left: 0 !important; padding: 0 14px !important; }
+  .gv-band-row > .gv-stack[data-span="2"] { grid-column: span 2; }
+  .gv-band-row > .gv-stack[data-span="3"] { grid-column: 1 / -1; }
+  .gv-band-row > .gv-stack:first-child { padding-left: 0 !important; }
+  .gv-band-row > .gv-stack:last-child { padding-right: 0 !important; }
+  .gv-band-row > .gv-stack + .gv-stack { border-left: 1px solid var(--ink) !important; }
+}
+@container page (max-width: 439px) {
+  .gv-band-row > .gv-stack + .gv-stack { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--ink); }
+}
+
+/* ------------------------------------------------------------------ *
+ *  Texte courant : Minion / Caslon, justifié, césures
+ * ------------------------------------------------------------------ */
+.gv-prose {
+  font-family: var(--font-body);
+  font-size: 13.6px;
+  line-height: 1.26;
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphenate-limit-chars: 6 3 3;
+  font-feature-settings: "kern", "liga";
+  orphans: 2;
+  widows: 2;
+}
+.gv-prose p { margin: 0; text-indent: 0.95em; }
+.gv-prose p:first-child,
+.gv-prose p.noindent { text-indent: 0; }
+.gv-prose strong { font-weight: 700; }
+.gv-prose em { font-style: italic; }
+.gv-prose sup { font-size: 0.62em; line-height: 0; vertical-align: 0.5em; }
+
+/* lettrine Didone sur 2-3 lignes */
+.gv-dropcap::first-letter {
+  float: left;
+  font-family: var(--font-didone);
+  font-weight: 400;
+  font-variation-settings: "opsz" 48;
+  font-size: 3.55em;
+  line-height: 0.74;
+  padding: 0.07em 0.07em 0 0;
+  margin-left: -0.02em;
+  color: var(--ink);
+}
+
+/* ------------------------------------------------------------------ *
+ *  Titre de site + kanji + filet + métadonnées
+ * ------------------------------------------------------------------ */
+.gv-poi-title {
+  font-family: var(--font-garamond);
+  font-weight: 500;
+  font-size: 19.5px;
+  line-height: 1.05;
+  letter-spacing: -0.005em;
+  margin: 0;
+  display: block;
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--ink);
+}
+button.gv-poi-title:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+
+.gv-kanji {
+  font-family: var(--font-kanji);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  margin-top: 5px;
+  color: #2b2925;
+}
+
+.gv-meta {
+  font-family: var(--font-gothic);
+  font-stretch: 75%;
+  font-variation-settings: "wdth" 75;
+  font-style: italic;
+  font-size: 10.6px;
+  line-height: 1.28;
+  color: #26241f;
+  border-top: 1px solid var(--ink);
+  margin-top: 8px;
+  padding-top: 6px;
+  text-align: left;
+  hyphens: none;
+}
+.gv-meta .ico { vertical-align: -2px; }
+
+/* ------------------------------------------------------------------ *
+ *  Fiches pratiques (adresse, téléphone, horaires, tarifs)
+ * ------------------------------------------------------------------ */
+.gv-address { margin: 0; font-family: var(--font-gothic); font-stretch: 75%; font-variation-settings: "wdth" 75; }
+.gv-address + .gv-address { margin-top: 6px; }
+.gv-address .name {
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1.1;
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  color: var(--ink);
+}
+button.name:hover { text-decoration: underline; text-underline-offset: 2px; }
+.gv-address .info {
+  font-style: italic;
+  font-size: 10.8px;
+  line-height: 1.35;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1px 6px;
+  padding-left: 0;
+  color: #1f1d19;
+}
+.gv-address .info .it { display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; }
+.gv-address .note { font-style: italic; font-size: 10.2px; color: #3a3832; flex-basis: 100%; }
+
+/* ------------------------------------------------------------------ *
+ *  Photos : légende en gras, filet, cadre
+ * ------------------------------------------------------------------ */
+.gv-figure { margin: 0; }
+.gv-figure .frame { border: 1px solid #1118; background: #ddd; line-height: 0; position: relative; overflow: hidden; }
+.gv-figure figcaption {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 11.4px;
+  line-height: 1.15;
+  margin-top: 5px;
+  letter-spacing: 0.005em;
+  text-align: left;
+}
+.gv-figure[data-cutout="true"] .frame { border: 0; background: transparent; }
+.gv-figure[data-cutout="true"] figcaption { text-align: center; font-size: 10.6px; }
+
+/* ------------------------------------------------------------------ *
+ *  Encadré d'histoire : filet double, titre en petites capitales
+ * ------------------------------------------------------------------ */
+.gv-sidebar {
+  border: 1px solid var(--ink);
+  padding: 9px 12px 12px;
+  position: relative;
+  background: var(--paper);
+}
+.gv-sidebar::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 0.5px solid #1119;
+  pointer-events: none;
+}
+.gv-sidebar h3 {
+  font-family: var(--font-garamond);
+  font-variant-caps: small-caps;
+  font-feature-settings: "smcp", "c2sc";
+  text-transform: lowercase;
+  letter-spacing: 0.07em;
+  font-weight: 600;
+  font-size: 15.5px;
+  margin: 0 0 7px;
+  text-align: left;
+}
+.gv-sidebar.italic .gv-prose { font-style: italic; }
+.gv-sidebar.italic .gv-prose strong { font-style: normal; }
+.gv-sidebar .gv-prose p { text-indent: 0; }
+.gv-sidebar .gv-prose p + p { text-indent: 0.95em; }
+
+/* Titre de chapitre encadré (« SHIKOKU ») */
+.gv-chapter-title {
+  border: 1px solid var(--ink);
+  text-align: center;
+  padding: 9px 12px 8px;
+  position: relative;
+}
+.gv-chapter-title h1 {
+  margin: 0;
+  font-family: var(--font-garamond);
+  font-variant-caps: small-caps;
+  font-feature-settings: "smcp", "c2sc";
+  text-transform: lowercase;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  font-size: 30px;
+  line-height: 1;
+}
+.gv-chapter-title .orn {
+  display: block;
+  margin: 5px auto 0;
+  width: 58%;
+  height: 4px;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+
+/* ------------------------------------------------------------------ *
+ *  Boutons de l'interface (même vocabulaire : noir, filets, capitales)
+ * ------------------------------------------------------------------ */
+.gv-btn {
+  font-family: var(--font-gothic);
+  font-stretch: 75%;
+  font-variation-settings: "wdth" 75;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  background: var(--ink);
+  color: #fff;
+  border: 1px solid var(--ink);
+  padding: 10px 18px 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: background-color 0.2s, color 0.2s;
+}
+.gv-btn:hover { background: var(--region); color: var(--on-region); border-color: var(--ink); }
+.gv-btn.ghost { background: transparent; color: var(--ink); }
+.gv-btn.ghost:hover { background: var(--ink); color: #fff; }
+
+/* Contrôles flottants de visite */
+.gv-float-nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--ink);
+  color: #fff;
+  border: 2px solid var(--paper);
+  box-shadow: 0 0 0 1px var(--ink), 0 8px 18px -6px #0008;
+  font-family: var(--font-didone);
+  font-size: 30px;
+  line-height: 1;
+  transition: background-color 0.2s, transform 0.15s, opacity 0.2s;
+}
+.gv-float-nav:hover:not(:disabled) { background: var(--region); color: var(--on-region); }
+.gv-float-nav:active:not(:disabled) { transform: translateY(-50%) scale(0.94); }
+.gv-float-nav:disabled { opacity: 0.25; cursor: not-allowed; }
+
+/* ------------------------------------------------------------------ *
+ *  Surbrillance d'un site actif (sync carte ⇄ texte)
+ * ------------------------------------------------------------------ */
+.gv-poi { position: relative; scroll-margin-top: 96px; transition: opacity 0.35s; }
+@media (max-width: 1023px) { .gv-poi { scroll-margin-top: calc(34dvh + 90px); } }
+.gv-poi::before {
+  content: "";
+  position: absolute;
+  left: -9px;
+  top: -5px;
+  bottom: -5px;
+  width: 3px;
+  background: var(--region);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.gv-poi.is-active::before { transform: scaleY(1); }
+.gv-poi.is-active {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--region) 9%, transparent), transparent 85%);
+  box-shadow: -9px 0 0 0 color-mix(in srgb, var(--region) 9%, transparent);
+}
+[data-mode="tour"] .gv-poi:not(.is-active) { opacity: 0.42; }
+[data-mode="tour"] .gv-poi:not(.is-active):hover { opacity: 0.8; }
+
+@keyframes gv-pulse {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+@keyframes gv-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+.gv-rise { animation: gv-rise 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+
+/* ------------------------------------------------------------------ *
+ *  Carte : régions cliquables
+ * ------------------------------------------------------------------ */
+.gv-region-shape { cursor: pointer; transition: filter 0.2s, opacity 0.2s; outline: none; }
+.gv-region-shape:hover, .gv-region-shape:focus-visible { filter: brightness(1.08) saturate(1.08); }
+.gv-region-shape:focus-visible path { stroke: var(--ink); stroke-width: 2.4; }
+
+/* Impression : le prototype se lit aussi sur papier */
+@media print {
+  body::before { display: none; }
+  .gv-float-nav, .no-print { display: none !important; }
+}
+
+/* ------------------------------------------------------------------ *
+ *  Texte sur plusieurs colonnes à l'intérieur d'une pile (span 2 / 3)
+ * ------------------------------------------------------------------ */
+.gv-multi { column-count: 1; column-gap: 28px; column-fill: balance; }
+.gv-multi > * { break-inside: auto; }
+.gv-multi .no-split { break-inside: avoid; }
+.gv-multi .gv-address { break-inside: avoid; }
+@container page (min-width: 440px) {
+  .gv-multi[data-span="2"], .gv-multi[data-span="3"] { column-count: 2; column-rule: 1px solid var(--ink); }
+}
+@container page (min-width: 640px) {
+  .gv-multi[data-span="3"] { column-count: 3; }
+}
+
+/* « Comment y aller ? » : filet, titre en Didone espacé, texte italique */
+.gv-howto h3 {
+  font-family: var(--font-didone);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 10px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--ink);
+}
+.gv-howto .gv-prose { font-style: italic; font-size: 12.6px; line-height: 1.28; color: #2b2925; }
+.gv-howto .gv-prose p { text-indent: 0; }
+.gv-howto .gv-prose p + p { margin-top: 4px; }
+
+/* Ouverture de chapitre */
+.gv-intro-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+@container page (min-width: 640px) {
+  .gv-intro-grid { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 0; }
+  .gv-intro-grid > .fig { border-left: 1px solid var(--ink); padding-left: 14px; margin-left: 14px; }
+}
+
+/* Liste « Les sites d'un coup d'œil » */
+.gv-glance h3 {
+  font-family: var(--font-garamond);
+  font-variant-caps: small-caps;
+  font-feature-settings: "smcp", "c2sc";
+  text-transform: lowercase;
+  letter-spacing: 0.07em;
+  font-weight: 600;
+  font-size: 15px;
+  margin: 0 0 6px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--ink);
+}
+.gv-glance button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  text-align: left;
+  font-family: var(--font-garamond);
+  font-size: 15px;
+  line-height: 1.5;
+  background: none;
+  border: 0;
+  padding: 0 4px;
+  transition: background-color 0.2s;
+}
+.gv-glance button:hover, .gv-glance button[data-active="true"] {
+  background: color-mix(in srgb, var(--region) 16%, transparent);
+}
+.gv-glance button[data-active="true"] { font-weight: 600; }

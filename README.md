@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Guides Voir · Japon — prototype numérique
 
-## Getting Started
-
-First, run the development server:
+Transposition web de la direction artistique du guide *Guides Voir – Japon* (Hachette / Dorling Kindersley) :
+carte des régions au code couleur du rabat, pages en trois colonnes, visite guidée.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Liens profonds : `#/kyushu`, `#/kyushu/kumamoto`, `#/kyushu/kumamoto/visite`, `#/apercu/kyushu`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Architecture
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Fichier | Rôle |
+| --- | --- |
+| `src/components/JapanMap.tsx` | Carte SVG du Japon par région, encart Okinawa, villes, rose des vents |
+| `src/components/RegionPreviewCard.tsx` | Fiche d'aperçu (cadre de couleur, « Pages x-y », « Explorer la région ») |
+| `src/components/ColorCodeFlap.tsx` | Rabat « Visite mode d'emploi » (code couleur, interactif) |
+| `src/components/RegionColumnsLayout.tsx` | Pages : en-tête pointillé, folio, onglet de chapitre, grille 3 colonnes |
+| `src/components/PointOfInterestItem.tsx` | Site : titre + pastille + kanji, métadonnées, lettrine, fiches pratiques |
+| `src/components/RegionMapPanel.tsx`, `MapCanvas.tsx`, `MapBases.tsx` | Carte/plan synchronisés, pins, zoom animé |
+| `src/components/GuidedTourControls.tsx` | Boutons flottants `<` `>` et bandeau d'étape |
+| `src/state/app-state.tsx` | État global (une session par région : site actif, mode, étape) + URL |
+| `src/data/content/*.ts` | Jeu de données français (9 chapitres ; Kyushu, Tokyo, Shikoku, Centre détaillés) |
+| `src/data/plans.ts` | Plans stylisés (Tokyo-nord, Kyoto) |
+| `scripts/build-geo.mjs` | Génère `src/data/geo.generated.ts` (contours simplifiés) depuis un GeoJSON des préfectures |
 
-## Learn More
+Régénérer la géométrie : `node scripts/build-geo.mjs <japan.geojson> src/data/geo.generated.ts`
+(source utilisée : `dataofjapan/land`).
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Les photographies sont des visuels SVG de substitution ; renseigner `src` dans un `PhotoSpec`
+(ex. URL Unsplash) pour les remplacer.
