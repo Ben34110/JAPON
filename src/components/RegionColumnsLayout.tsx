@@ -15,6 +15,8 @@ const GAP = 28;
 const BIG_PHOTO_RATIO = 0.45;
 /** grossissement maximal du texte d'un lieu (ordinateur) */
 const MAX_ZOOM = 1.6;
+/** idem pour un lieu court, qui coule sur les trois colonnes d'une seule page */
+const MAX_ZOOM_SINGLE = 1.9;
 
 interface Props {
   region: Region;
@@ -181,7 +183,6 @@ export function RegionColumnsLayout({ region, content, activePoiId, nonce, sourc
 
   const measure = useCallback(() => {
     if (!size.w) return;
-    const s = size.w + GAP;
     const grow = size.w >= 700; // ordinateur : le texte grossit pour combler les pages peu remplies
     const zooms: number[] = [];
     const pages: number[] = segments.map((sg, i) => {
@@ -189,18 +190,16 @@ export function RegionColumnsLayout({ region, content, activePoiId, nonce, sourc
       if (sg.kind === "photo") return 1;
       const el = segRefs.current[i];
       if (!el) return 1;
+      // grossissement par variable CSS --z (multiplie les tailles de police) : pas de transform, rendu net partout
       const apply = (z: number) => {
-        el.style.zoom = z === 1 ? "" : String(z);
-        el.style.width = `${size.w / z}px`;
-        el.style.height = `${size.h / z}px`;
-        el.style.columnGap = `${GAP / z}px`;
-        // largeur de colonne et pages, dans le repère (zoomé) de l'élément
-        return Math.max(1, Math.round((el.scrollWidth + GAP / z) / (size.w / z + GAP / z)));
+        el.style.setProperty("--z", String(z));
+        return Math.max(1, Math.round((el.scrollWidth + GAP) / (size.w + GAP)));
       };
       const n0 = apply(1);
       if (grow) {
+        const cap = n0 === 1 ? MAX_ZOOM_SINGLE : MAX_ZOOM;
         let best = 1;
-        for (let z = 1.08; z <= MAX_ZOOM + 0.001; z += 0.08) {
+        for (let z = 1.08; z <= cap + 0.001; z += 0.06) {
           if (apply(z) === n0) best = z;
           else break;
         }
@@ -211,9 +210,8 @@ export function RegionColumnsLayout({ region, content, activePoiId, nonce, sourc
     });
     setSegPages((prev) => (prev.length === pages.length && prev.every((v, i) => v === pages[i]) ? prev : pages));
     setSegZoom((prev) => (prev.length === zooms.length && prev.every((v, i) => v === zooms[i]) ? prev : zooms));
-    void s;
     setMeasured((m) => m + 1);
-  }, [size.w, size.h, segments]);
+  }, [size.w, segments]);
 
   useLayoutEffect(() => {
     measure();
@@ -357,7 +355,7 @@ export function RegionColumnsLayout({ region, content, activePoiId, nonce, sourc
                       segRefs.current[i] = el;
                     }}
                     className="gv-flow gv-prose"
-                    style={{ width: size.w / (segZoom[i] ?? 1), height: size.h / (segZoom[i] ?? 1), columnCount: cols, columnGap: GAP / (segZoom[i] ?? 1), zoom: segZoom[i] && segZoom[i] !== 1 ? segZoom[i] : undefined }}
+                    style={{ width: size.w, height: size.h, columnCount: cols, columnGap: GAP, columnFill: "auto", ["--z" as string]: segZoom[i] ?? 1 } as CSSProperties}
                   >
                     {sg.blocks.map((b, bi) => renderBlock(b, `${sg.key}-${bi}`))}
                   </div>
