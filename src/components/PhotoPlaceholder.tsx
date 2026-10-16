@@ -1,6 +1,7 @@
 "use client";
 
-import { useId, type ReactNode } from "react";
+import { useId, useState, type ReactNode } from "react";
+import { PHOTOS } from "@/data/photos.generated";
 import type { PhotoMotif, PhotoSpec } from "@/lib/types";
 
 /**
@@ -522,32 +523,32 @@ export function PhotoPlaceholder({
   spec,
   className,
   label,
+  fill = false,
 }: {
   spec: PhotoSpec;
   className?: string;
   label?: string;
+  /** occupe toute la hauteur du conteneur (au lieu de suivre le format `aspect`) */
+  fill?: boolean;
 }) {
   const uid = useId().replace(/:/g, "");
+  const [failed, setFailed] = useState(false);
   const W = 200;
   const H = +(W / spec.aspect).toFixed(1);
   const P = PALETTES[(spec.seed ?? 0) % PALETTES.length];
+  const photo = spec.wiki ? PHOTOS[spec.wiki] : undefined;
+  const alt = label ?? spec.caption?.replace(/\*/g, "") ?? "Illustration";
 
-  if (spec.src) {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img src={spec.src} alt={label ?? spec.caption ?? ""} className={className} style={{ width: "100%", aspectRatio: String(spec.aspect), objectFit: "cover", display: "block" }} loading="lazy" />;
-  }
-
-  const scene = SCENES[spec.motif]({ W, H, P, id: uid });
-  return (
+  const svg = (
     <svg
       className={className}
       viewBox={`0 0 ${W} ${H}`}
       preserveAspectRatio="xMidYMid slice"
       role="img"
-      aria-label={label ?? spec.caption ?? "Illustration"}
-      style={{ width: "100%", aspectRatio: String(spec.aspect), display: "block" }}
+      aria-label={alt}
+      style={{ width: "100%", ...(fill ? { height: "100%" } : { aspectRatio: String(spec.aspect) }), display: "block" }}
     >
-      {scene}
+      {SCENES[spec.motif]({ W, H, P, id: uid })}
       {!spec.cutout && (
         <>
           <defs>
@@ -560,5 +561,24 @@ export function PhotoPlaceholder({
         </>
       )}
     </svg>
+  );
+
+  const src = photo?.src ?? spec.src;
+  if (!src || failed) return svg;
+
+  // vraie photographie (Wikimedia Commons) : recadrée au format de la maquette
+  return (
+    <span className={className} style={{ display: "block", position: "relative", width: "100%", ...(fill ? { height: "100%" } : { aspectRatio: String(spec.aspect) }), overflow: "hidden", background: "#d9d6cc" }}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        onError={() => setFailed(true)}
+        title={photo ? `Photo : ${photo.author} — ${photo.license} (Wikimedia Commons)` : undefined}
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
+      />
+    </span>
   );
 }

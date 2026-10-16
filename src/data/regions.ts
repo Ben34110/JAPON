@@ -14,9 +14,9 @@ export const REGIONS: Region[] = [
     pages: [58, 117],
     summary:
       "Capitale tentaculaire où les gratte-ciel côtoient les sanctuaires. Le guide la découpe en trois secteurs — centre, nord et ouest — puis la détaille quartier par quartier, plans à l'appui.",
-    highlights: ["Ueno et Yanaka", "Le marché d'Ameyoko", "Asakusa"],
-    photo: { motif: "skyline", aspect: 0.62, seed: 1 },
-    mapKind: "plan",
+    highlights: ["Ueno et Yanaka", "Asakusa", "Kamakura"],
+    photo: { motif: "skyline", aspect: 0.62, seed: 1, wiki: "kaminarimon" },
+    mapKind: "both",
   },
   {
     id: "centre-honshu",
@@ -28,7 +28,7 @@ export const REGIONS: Region[] = [
     summary:
       "Entre les Alpes japonaises et la mer du Japon, des villes de caractère — Kanazawa, Takayama — et le mont Fuji, dont le cône parfait domine l'horizon.",
     highlights: ["Kanazawa et le Kenroku-en", "Takayama", "Le mont Fuji"],
-    photo: { motif: "garden", aspect: 0.62, seed: 2 },
+    photo: { motif: "garden", aspect: 0.62, seed: 2, wiki: "kenrokuen" },
     mapKind: "geo",
   },
   {
@@ -40,9 +40,9 @@ export const REGIONS: Region[] = [
     pages: [148, 179],
     summary:
       "Capitale impériale pendant plus de mille ans, Kyoto concentre temples, jardins et quartiers de geishas. Les portiques rouges du Fushimi Inari en sont l'image la plus célèbre.",
-    highlights: ["Fushimi Inari", "Kinkaku-ji", "Gion"],
-    photo: { motif: "torii", aspect: 0.62, seed: 3 },
-    mapKind: "plan",
+    highlights: ["Fushimi Inari", "Kinkaku-ji", "Nara"],
+    photo: { motif: "torii", aspect: 0.62, seed: 3, wiki: "fushimi-inari" },
+    mapKind: "both",
   },
   {
     id: "ouest-honshu",
@@ -54,7 +54,7 @@ export const REGIONS: Region[] = [
     summary:
       "D'Osaka la marchande à Nara la sacrée, du château d'Himeji au parc de la Paix d'Hiroshima : la région la plus riche en patrimoine, où se joue une grande part de l'histoire du pays.",
     highlights: ["Nara et le Todai-ji", "Le château d'Himeji", "Hiroshima et Miyajima"],
-    photo: { motif: "pagoda", aspect: 0.62, seed: 4 },
+    photo: { motif: "pagoda", aspect: 0.62, seed: 4, wiki: "himeji-castle" },
     mapKind: "geo",
   },
   {
@@ -67,7 +67,7 @@ export const REGIONS: Region[] = [
     summary:
       "La plus petite des quatre grandes îles, longtemps isolée par la mer Intérieure. Villages de pêcheurs, jardins, tourbillons de Naruto et pèlerinage des quatre-vingt-huit temples.",
     highlights: ["La mer Intérieure", "Takamatsu et Kotohira", "Les tourbillons de Naruto"],
-    photo: { motif: "garden", aspect: 0.62, seed: 5 },
+    photo: { motif: "garden", aspect: 0.62, seed: 5, wiki: "ritsurin" },
     mapKind: "geo",
   },
   {
@@ -80,7 +80,7 @@ export const REGIONS: Region[] = [
     summary:
       "Île volcanique et fenêtre historique sur l'étranger : Nagasaki, port ouvert aux Portugais et aux Hollandais, le château de Kumamoto et la plus vaste caldeira du monde, au mont Aso.",
     highlights: ["Nagasaki", "Le château de Kumamoto", "Le mont Aso"],
-    photo: { motif: "harbor", aspect: 0.62, seed: 6 },
+    photo: { motif: "harbor", aspect: 0.62, seed: 6, wiki: "kumamoto-castle" },
     mapKind: "geo",
   },
   {
@@ -93,7 +93,7 @@ export const REGIONS: Region[] = [
     summary:
       "Archipel subtropical aux eaux turquoise, ancien royaume de Ryukyu à la culture singulière : château de Shuri, récifs coralliens et cuisine insulaire.",
     highlights: ["Naha et le château de Shuri", "Les récifs coralliens", "Le royaume de Ryukyu"],
-    photo: { motif: "reef", aspect: 0.62, seed: 7 },
+    photo: { motif: "reef", aspect: 0.62, seed: 7, wiki: "shuri-castle" },
     mapKind: "geo",
   },
   {
@@ -106,7 +106,7 @@ export const REGIONS: Region[] = [
     summary:
       "Le Tohoku, pays de forêts, de baies et de neige. Temples enfouis dans les cèdres, îlots couverts de pins de Matsushima, châteaux de bois du Nord.",
     highlights: ["Matsushima", "Hiraizumi", "Hirosaki"],
-    photo: { motif: "pagoda", aspect: 0.62, seed: 8 },
+    photo: { motif: "pagoda", aspect: 0.62, seed: 8, wiki: "chuson-ji" },
     mapKind: "geo",
   },
   {
@@ -119,7 +119,7 @@ export const REGIONS: Region[] = [
     summary:
       "La grande île du Nord, colonisée tardivement : espaces sauvages, volcans, festival de la neige de Sapporo et péninsule de Shiretoko, inscrite au patrimoine mondial.",
     highlights: ["Sapporo", "Hakodate", "La péninsule de Shiretoko"],
-    photo: { motif: "mountain", aspect: 0.62, seed: 9 },
+    photo: { motif: "mountain", aspect: 0.62, seed: 9, wiki: "shiretoko" },
     mapKind: "geo",
   },
 ];

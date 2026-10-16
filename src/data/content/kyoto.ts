@@ -10,17 +10,25 @@ export const kyoto: RegionContent = {
     title: "Kyoto",
     paragraphs: [
       "Capitale impériale de 794 à 1868, Kyoto fut épargnée par les bombardements de la dernière guerre et conserve dix-sept sites inscrits au patrimoine mondial. Sur un damier de rues tracé à la chinoise, entre les collines de Higashiyama à l'est et de Nishiyama à l'ouest, des centaines de temples, de sanctuaires et de jardins se cachent derrière des murs de terre.",
-      "La ville se visite à pied, à vélo ou en bus, en suivant les saisons : cerisiers en avril, érables rouges en novembre, festival de Gion en juillet. Ce chapitre propose cinq étapes, du nord-ouest au sud.",
+      "La ville se visite à pied, à vélo ou en bus, en suivant les saisons : cerisiers en avril, érables rouges en novembre, festival de Gion en juillet. Ce chapitre propose cinq étapes en ville, du nord-ouest au sud, puis une excursion à Nara.",
     ],
-    figure: { motif: "torii", aspect: 0.55, cutout: false, caption: "Allée de portiques du Fushimi Inari" },
+    figure: { motif: "torii", aspect: 0.55, cutout: false, caption: "La terrasse du Kiyomizu-dera, suspendue à la colline", wiki: "kiyomizu-dera" },
   },
-  mapLabels: [],
+  clusterLabel: "Kyoto",
+  mapLabels: [
+    { text: "Lac Biwa", geo: [135.97, 35.2], kind: "sea", rotate: 62 },
+    { text: "Osaka", geo: [135.502, 34.693], kind: "place" },
+    { text: "Uji", geo: [135.8, 34.889], kind: "place" },
+    { text: "Mont Hiei", geo: [135.83, 35.075], kind: "relief" },
+    { text: "Monts Ikoma", geo: [135.68, 34.7], kind: "relief" },
+  ],
   pois: [
     {
       id: "kinkaku-ji",
       marker: 1,
       name: "Kinkaku-ji",
       nameJa: "金閣寺",
+      geo: [135.7292, 35.0394],
       plan: [276, 168],
       meta: {
         prefecture: "Kita-ku.",
@@ -37,6 +45,7 @@ export const kyoto: RegionContent = {
       marker: 2,
       name: "Nijo-jo",
       nameJa: "二条城",
+      geo: [135.7479, 35.0142],
       plan: [390, 468],
       meta: {
         plan: "Plan 2 B3.",
@@ -55,6 +64,7 @@ export const kyoto: RegionContent = {
       marker: 3,
       name: "Gion",
       nameJa: "祇園",
+      geo: [135.7753, 35.0037],
       plan: [620, 524],
       meta: {
         plan: "Plan 3 D2.",
@@ -72,6 +82,7 @@ export const kyoto: RegionContent = {
       marker: 4,
       name: "Kiyomizu-dera",
       nameJa: "清水寺",
+      geo: [135.785, 34.9949],
       plan: [690, 628],
       meta: {
         plan: "Plan 3 E3.",
@@ -88,6 +99,7 @@ export const kyoto: RegionContent = {
       marker: 5,
       name: "Fushimi Inari-taisha",
       nameJa: "伏見稲荷大社",
+      geo: [135.7727, 34.9671],
       plan: [712, 902],
       meta: {
         plan: "Plan 5 E4.",
@@ -98,6 +110,25 @@ export const kyoto: RegionContent = {
         "Partout, des renards de pierre, messagers de la divinité, gardent une clé ou une gerbe de riz dans la gueule. On compte deux heures pour la boucle complète, que l'on parcourt de préférence tôt le matin, quand le sentier est désert.",
       ],
       practical: [{ name: "Fushimi Inari-taisha", icon: "temple", hours: "24 h sur 24", admission: "free" }],
+    },
+    {
+      id: "nara",
+      marker: 6,
+      name: "Nara",
+      nameJa: "奈良",
+      geo: [135.8398, 34.689],
+      meta: {
+        prefecture: "Préfecture de Nara.",
+        transit: [{ mode: "train", text: "Kintetsu Kyoto → Kintetsu-Nara, 35 mn en express." }],
+      },
+      body: [
+        "À une demi-heure de Kyoto, Nara fut la première capitale fixe du Japon (710-784). Son parc, où paissent plus d'un millier de cerfs en liberté, entoure le **Todai-ji**, dont la grande salle, l'un des plus vastes édifices de bois du monde, abrite un Bouddha de bronze de quinze mètres.",
+        "Plus au sud, le sanctuaire **Kasuga Taisha** est bordé de milliers de lanternes ; le quartier de **Naramachi** garde ses maisons de marchands. Nara fait l'objet d'un chapitre plus complet dans l'Ouest de Honshu (p. 182).",
+      ],
+      practical: [
+        { name: "Todai-ji", icon: "temple", hours: "t.l.j.", admission: "paid" },
+        { name: "Kasuga Taisha", icon: "temple", hours: "t.l.j.", admission: "paid" },
+      ],
     },
   ],
   sidebars: [
@@ -119,7 +150,7 @@ export const kyoto: RegionContent = {
           stacks: [
             { span: 1, blocks: [{ t: "poi", id: "kinkaku-ji" }] },
             { span: 1, blocks: [{ t: "poi", id: "nijo-jo" }] },
-            { span: 1, blocks: [{ t: "figure", photo: { motif: "gate", aspect: 1, caption: "Le Pavillon d'or se reflète dans l'étang", seed: 1 } }] },
+            { span: 1, blocks: [{ t: "figure", photo: { motif: "gate", aspect: 1, caption: "Le Pavillon d'or se reflète dans l'étang", wiki: "kinkaku-ji", seed: 1 } }] },
           ],
         },
       ],
@@ -129,14 +160,23 @@ export const kyoto: RegionContent = {
         {
           stacks: [
             { span: 1, blocks: [{ t: "poi", id: "gion" }] },
-            { span: 1, blocks: [{ t: "figure", photo: { motif: "street", aspect: 0.85, caption: "Maisons de thé du quartier de Gion", seed: 0 } }, { t: "poi", id: "kiyomizu-dera" }] },
+            { span: 1, blocks: [{ t: "figure", photo: { motif: "street", aspect: 0.85, caption: "Maisons de thé du quartier de Gion", wiki: "gion", seed: 0 } }, { t: "poi", id: "kiyomizu-dera" }] },
             { span: 1, blocks: [{ t: "poi", id: "fushimi-inari" }] },
           ],
         },
         {
           stacks: [
-            { span: 2, blocks: [{ t: "figure", photo: { motif: "torii", aspect: 2, caption: "Les portiques vermillon du Fushimi Inari-taisha", seed: 0 } }] },
+            { span: 2, blocks: [{ t: "figure", photo: { motif: "torii", aspect: 2, caption: "Les portiques vermillon du Fushimi Inari-taisha", wiki: "fushimi-inari", seed: 0 } }] },
             { span: 1, blocks: [{ t: "sidebar", id: "gion-jeux" }] },
+          ],
+        },
+        {
+          stacks: [
+            { span: 2, blocks: [{ t: "poi", id: "nara" }] },
+            {
+              span: 1,
+              blocks: [{ t: "figure", photo: { motif: "pagoda", aspect: 1, caption: "La grande salle du Todai-ji, à Nara", seed: 0, wiki: "todai-ji" } }],
+            },
           ],
         },
       ],

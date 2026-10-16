@@ -12,7 +12,7 @@ export const okinawa: RegionContent = {
       "À mi-chemin entre Kyushu et Taïwan, l'archipel des Ryukyu forme un chapelet d'îles aux eaux turquoise, bordées de récifs coralliens. Royaume indépendant jusqu'en 1879, Okinawa a développé une culture singulière, mélange d'influences chinoises, japonaises et d'Asie du Sud-Est.",
       "Le climat y est subtropical : on y mange du porc braisé, des algues et du fruit amer, on y danse au son du *sanshin*, petit luth à trois cordes, et l'on y vit centenaire plus souvent qu'ailleurs.",
     ],
-    figure: { motif: "reef", aspect: 0.55, caption: "Plage de sable blanc, île de Zamami", seed: 0 },
+    figure: { motif: "reef", aspect: 0.55, caption: "Archipel de Kerama, vu des hauteurs de Zamami", wiki: "zamami", seed: 0 },
   },
   mapLabels: [
     { text: "Mer de Chine orientale", geo: [127.1, 26.95], kind: "sea", rotate: -14 },
@@ -93,13 +93,13 @@ export const okinawa: RegionContent = {
         {
           stacks: [
             { span: 1, blocks: [{ t: "poi", id: "naha" }] },
-            { span: 1, blocks: [{ t: "figure", photo: { motif: "gate", aspect: 1, caption: "La porte Shureimon, château de Shuri", seed: 0 } }, { t: "poi", id: "shuri-jo" }] },
+            { span: 1, blocks: [{ t: "figure", photo: { motif: "gate", aspect: 1, caption: "La porte Shureimon, château de Shuri", wiki: "shureimon", seed: 0 } }, { t: "poi", id: "shuri-jo" }] },
             { span: 1, blocks: [{ t: "sidebar", id: "ryukyu" }] },
           ],
         },
         {
           stacks: [
-            { span: 2, blocks: [{ t: "figure", photo: { motif: "reef", aspect: 2, caption: "Récif corallien au large de la côte ouest", seed: 0 } }] },
+            { span: 2, blocks: [{ t: "figure", photo: { motif: "reef", aspect: 2, caption: "Le château de Shuri, reconstruit après la guerre", wiki: "shuri-castle", seed: 0 } }] },
             { span: 1, blocks: [{ t: "poi", id: "churaumi" }] },
           ],
         },

@@ -12,6 +12,7 @@ interface Props {
   hoverId: RegionId | null;
   onSelect: (id: RegionId) => void;
   onHover: (id: RegionId | null) => void;
+  className?: string;
 }
 
 const [W, H] = HOME_MAP.viewBox;
@@ -51,7 +52,7 @@ const SEAS: { text: string; lonLat: [number, number]; rotate?: number }[] = [
   { text: "Mer de Chine orientale", lonLat: [128.0, 32.2], rotate: -62 },
 ];
 
-export function JapanMap({ selectedId, hoverId, onSelect, onHover }: Props) {
+export function JapanMap({ selectedId, hoverId, onSelect, onHover, className = "block h-auto w-full" }: Props) {
   const uid = useId().replace(/:/g, "");
   const order = selectedId ? [...DRAW_ORDER.filter((r) => r !== selectedId), selectedId] : DRAW_ORDER;
   const oki = HOME_MAP.okinawa;
@@ -70,7 +71,7 @@ export function JapanMap({ selectedId, hoverId, onSelect, onHover }: Props) {
   };
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="block h-auto w-full" role="group" aria-label="Carte du Japon par région">
+    <svg viewBox={`0 0 ${W} ${H}`} className={className} role="group" aria-label="Carte du Japon par région">
       <defs>
         <filter id={`${uid}-glow`} x="-10%" y="-10%" width="120%" height="120%">
           <feGaussianBlur stdDeviation="14" />

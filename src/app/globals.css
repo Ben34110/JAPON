@@ -659,3 +659,71 @@ button.name:hover { text-decoration: underline; text-underline-offset: 2px; }
   background: color-mix(in srgb, var(--region) 16%, transparent);
 }
 .gv-glance button[data-active="true"] { font-weight: 600; }
+
+/* ------------------------------------------------------------------ *
+ *  Livre paginé : tout tient dans le cadre, on tourne les pages
+ * ------------------------------------------------------------------ */
+.gv-sheet-fixed {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 22px 10px;
+}
+.gv-sheet-fixed .gv-running { flex: none; margin-bottom: 10px; }
+.gv-viewport { position: relative; flex: 1 1 0; min-height: 0; overflow: hidden; }
+.gv-track { display: flex; width: max-content; transition: transform 0.55s cubic-bezier(0.3, 0.7, 0.2, 1); will-change: transform; }
+.gv-flow { position: relative; column-fill: auto; column-rule: 1px solid var(--ink); }
+.gv-flow > * { margin: 0 0 14px; break-inside: auto; }
+.gv-flow .gv-figure, .gv-flow .gv-sidebar, .gv-flow .gv-flow-item { break-inside: avoid; }
+.gv-flow .gv-address { break-inside: avoid; }
+.gv-flow .gv-poi-head { break-inside: avoid; }
+.gv-flow .gv-poi { overflow: visible; }
+.gv-pager {
+  flex: none;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 2px dotted var(--ink);
+  margin-top: 8px;
+  padding-top: 8px;
+}
+.gv-pager > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: 0;
+  padding: 6px 4px;
+  font-family: var(--font-gothic);
+  font-stretch: 75%;
+  font-variation-settings: "wdth" 75;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+.gv-pager > button:hover:not(:disabled) { color: var(--region); }
+.gv-pager > button:disabled { opacity: 0.25; cursor: default; }
+.gv-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  background: transparent;
+  padding: 0;
+  transition: background-color 0.25s, transform 0.25s;
+}
+.gv-dot[data-on="true"] { background: var(--region); transform: scale(1.35); }
+.gv-opener-text { font-size: 14.4px; line-height: 1.3; }
+.gv-opener-text p { text-indent: 0; }
+.gv-opener-text p + p { margin-top: 6px; text-indent: 0.95em; }
+.gv-toc { display: flex; align-items: baseline; gap: 6px; width: 100%; background: none; border: 0; padding: 0 2px; text-align: left; transition: background-color 0.2s; }
+.gv-toc:hover { background: color-mix(in srgb, var(--region) 16%, transparent); }
+.gv-toc-dots { flex: 1; border-bottom: 1.5px dotted #111; transform: translateY(-4px); min-width: 12px; }
+
+.gv-flow .gv-group { margin: 0 0 14px; }
+.gv-flow .gv-group > * { margin-bottom: 14px; }
+.gv-flow .gv-newcol { break-before: column; }

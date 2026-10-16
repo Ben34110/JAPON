@@ -17,22 +17,22 @@ interface Props {
  */
 export function ColorCodeFlap({ selectedId, hoverId, onSelect, onHover }: Props) {
   return (
-    <section className="relative border border-[#111] bg-[var(--paper)] p-5" aria-labelledby="flap-title">
+    <section className="relative shrink-0 border border-[#111] bg-[var(--paper)] px-4 py-3" aria-labelledby="flap-title">
       <span className="pointer-events-none absolute inset-[4px] border border-[#111]" aria-hidden="true" />
       <div className="relative">
-        <div className="f-didone flex items-center justify-center gap-2.5 text-[10px] uppercase tracking-[0.28em]" aria-hidden="true">
-          Guides <EyeLogo size={11} color="#111" /> Voir
+        <div className="flex items-baseline justify-between gap-3">
+          <h2 id="flap-title" className="f-didone m-0 text-[21px] font-normal uppercase leading-[1.05] tracking-[0.04em]">
+            Visite <span className="text-[0.82em]">mode d’emploi</span>
+          </h2>
+          <div className="f-didone flex items-center gap-2 text-[9px] uppercase tracking-[0.26em]" aria-hidden="true">
+            Guides <EyeLogo size={9} color="#111" /> Voir
+          </div>
         </div>
-        <h2 id="flap-title" className="f-didone m-0 mt-2.5 text-center text-[26px] font-normal uppercase leading-[1.05] tracking-[0.04em]">
-          Visite <span className="text-[0.82em]">mode</span> <span className="text-[0.82em]">d’emploi</span>
-        </h2>
-        <p className="f-body mx-auto mt-2 max-w-[30ch] text-center text-[14px] italic leading-[1.25]">
-          Pour vous aider à retrouver votre page, une couleur a été attribuée à chaque chapitre
-        </p>
-        <hr className="mx-auto my-3 border-0 border-t border-[#111]" />
+        <p className="f-body m-0 mt-0.5 text-[13px] italic leading-[1.2] text-[#3a3832]">Pour vous aider à retrouver votre page, une couleur a été attribuée à chaque chapitre.</p>
+        <hr className="my-2 border-0 border-t border-[#111]" />
 
-        <div className="f-garamond mb-2 text-center text-[13px] font-semibold uppercase tracking-[0.18em]">Code couleur des chapitres</div>
-        <ul className="m-0 list-none p-0">
+        <div className="f-garamond mb-1 text-[12px] font-semibold uppercase tracking-[0.18em]">Code couleur des chapitres</div>
+        <ul className="m-0 grid list-none grid-cols-2 gap-x-3 p-0">
           {REGIONS.map((r) => {
             const on = selectedId === r.id;
             const hot = hoverId === r.id;
@@ -46,41 +46,37 @@ export function ColorCodeFlap({ selectedId, hoverId, onSelect, onHover }: Props)
                   onFocus={() => onHover(r.id)}
                   onBlur={() => onHover(null)}
                   aria-pressed={on}
-                  className="group flex w-full items-center gap-3 border-0 bg-transparent px-1.5 py-[3px] text-left transition-colors"
+                  className="group flex w-full items-center gap-2.5 border-0 px-1 py-[2px] text-left transition-colors"
                   style={{ background: on || hot ? `color-mix(in srgb, ${r.color} 14%, transparent)` : "transparent" }}
                 >
-                  <span className="block h-[26px] shrink-0 transition-[width] duration-200" style={{ background: r.color, width: on || hot ? 14 : 5 }} aria-hidden="true" />
+                  <span className="block h-[24px] shrink-0 transition-[width] duration-200" style={{ background: r.color, width: on || hot ? 12 : 5 }} aria-hidden="true" />
                   <span className="min-w-0 flex-1">
-                    <span className={`f-garamond block text-[15px] uppercase leading-[1.1] tracking-[0.04em] [font-variant-caps:normal] ${on ? "font-bold" : "font-medium"}`}>{r.name.replace(/^L'/, "L’")}</span>
-                    <span className="f-body block text-[13px] italic leading-[1.1] text-[#3a3832]">{pagesLabel(r)}</span>
+                    <span className={`f-garamond block truncate text-[13.5px] uppercase leading-[1.1] tracking-[0.03em] ${on ? "font-bold" : "font-medium"}`}>{r.name.replace(/'/g, "’")}</span>
+                    <span className="f-body block text-[12px] italic leading-[1.1] text-[#3a3832]">{pagesLabel(r)}</span>
                   </span>
-                  <svg className="shrink-0 opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100" style={{ opacity: on ? 1 : undefined }} width="14" height="10" viewBox="0 0 14 10" aria-hidden="true">
-                    <path d="M0 5h12M8 1l4 4-4 4" fill="none" stroke="#111" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
                 </button>
               </li>
             );
           })}
         </ul>
 
-        {FLAP_EXTRAS.map((g) => (
-          <div key={g.group} className="mt-4">
-            <div className="f-didone mb-1.5 border-b border-[#111] pb-1 text-[10.5px] uppercase tracking-[0.2em]">{g.group}</div>
-            <ul className="m-0 list-none p-0">
-              {g.items.map((it) => (
-                <li key={it.name} className="flex items-center gap-3 px-1.5 py-[3px]" aria-label={`${it.name}, pages ${it.pages[0]}-${it.pages[1]}`}>
-                  <span className="block h-[22px] w-[5px] shrink-0" style={{ background: it.color }} aria-hidden="true" />
-                  <span>
-                    <span className="f-garamond block text-[14px] font-medium uppercase leading-[1.1] tracking-[0.04em]">{it.name.replace(/'/g, "’")}</span>
-                    <span className="f-body block text-[13px] italic leading-[1.1] text-[#3a3832]">
-                      Pages {it.pages[0]}-{it.pages[1]}
+        <div className="mt-2 grid grid-cols-2 gap-x-3 border-t border-[#111] pt-1.5">
+          {FLAP_EXTRAS.map((g) => (
+            <div key={g.group}>
+              <div className="f-didone mb-0.5 text-[9px] uppercase tracking-[0.2em]">{g.group}</div>
+              <ul className="m-0 list-none p-0">
+                {g.items.map((it) => (
+                  <li key={it.name} className="flex items-center gap-2 py-px" aria-label={`${it.name}, pages ${it.pages[0]}-${it.pages[1]}`}>
+                    <span className="block h-[12px] w-[5px] shrink-0" style={{ background: it.color }} aria-hidden="true" />
+                    <span className="f-body truncate text-[12px] leading-[1.2]">
+                      <span className="f-garamond uppercase">{it.name.replace(/'/g, "’")}</span> <em className="text-[#4a4742]">p. {it.pages[0]}-{it.pages[1]}</em>
                     </span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

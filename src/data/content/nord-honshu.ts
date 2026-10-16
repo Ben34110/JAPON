@@ -12,7 +12,7 @@ export const nordHonshu: RegionContent = {
       "Le Tohoku — « l'Est du Nord » — a longtemps été considéré comme les confins du pays : des hivers de neige, des récoltes de riz parfois ruinées par le froid, un dialecte que le reste du Japon comprenait mal. C'est pourtant ici que le poète Basho écrivit, en 1689, *La Sente étroite du Bout-du-Monde*.",
       "Aujourd'hui, les forêts de cèdres, les baies semées de pins et les châteaux de bois offrent un Japon plus lent, loin de la foule, que les trains à grande vitesse mettent à trois heures de Tokyo.",
     ],
-    figure: { motif: "pagoda", aspect: 0.55, caption: "Pagode du temple Chuson-ji, Hiraizumi", seed: 0 },
+    figure: { motif: "pagoda", aspect: 0.55, caption: "Le Chuson-ji, à Hiraizumi", wiki: "chuson-ji", seed: 0 },
   },
   mapLabels: [
     { text: "Mer du Japon", geo: [139.6, 39.9], kind: "sea" },
@@ -100,13 +100,13 @@ export const nordHonshu: RegionContent = {
         {
           stacks: [
             { span: 1, blocks: [{ t: "poi", id: "sendai" }] },
-            { span: 1, blocks: [{ t: "figure", photo: { motif: "sea", aspect: 1.1, caption: "Îlots couverts de pins dans la baie de Matsushima", seed: 2 } }, { t: "poi", id: "matsushima" }] },
+            { span: 1, blocks: [{ t: "figure", photo: { motif: "sea", aspect: 1.1, caption: "Îlots couverts de pins dans la baie de Matsushima", wiki: "matsushima", seed: 2 } }, { t: "poi", id: "matsushima" }] },
             { span: 1, blocks: [{ t: "poi", id: "hiraizumi" }] },
           ],
         },
         {
           stacks: [
-            { span: 2, blocks: [{ t: "figure", photo: { motif: "cherry", aspect: 2, caption: "Les douves du château de Hirosaki au printemps", seed: 0 } }] },
+            { span: 2, blocks: [{ t: "figure", photo: { motif: "cherry", aspect: 2, caption: "Le château de Hirosaki et ses cerisiers", wiki: "hirosaki-castle", seed: 0 } }] },
             { span: 1, blocks: [{ t: "poi", id: "hirosaki" }] },
           ],
         },

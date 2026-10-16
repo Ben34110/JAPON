@@ -14,8 +14,8 @@ export const shikoku: RegionContent = {
       "Son personnage le plus célèbre, Kukai, naquit dans une famille d'aristocrates démunis, en 774. Ce prêtre bouddhiste, considéré comme le père de la culture japonaise, visita en un unique pèlerinage quatre-vingt-huit temples de la région ; des milliers de fidèles reproduisent encore aujourd'hui son parcours, vêtus de blanc, un bâton à la main.",
       "L'île vit aujourd'hui de l'agriculture, des industries mécaniques et chimiques et de la pêche. Si les constructions ont altéré une grande partie des côtes nippones, le littoral de Shikoku reste pratiquement intact.",
     ],
-    figure: { motif: "pilgrim", aspect: 0.5, cutout: true, caption: "Statue de Jizo, pèlerinage des 88 temples" },
-    wide: { motif: "castle", aspect: 1.9, caption: "Matsuyama Castle, bâti en 1603, détruit par la foudre, puis reconstruit en 1835", seed: 2 },
+    figure: { motif: "pilgrim", aspect: 0.5, caption: "Tokushima et le mont Bizan", wiki: "tokushima" },
+    wide: { motif: "castle", aspect: 1.9, caption: "Matsuyama Castle, bâti en 1603, détruit par la foudre, puis reconstruit en 1835", wiki: "matsuyama-castle", seed: 2 },
   },
   mapLabels: [
     { text: "Mer Intérieure", geo: [133.6, 34.25], kind: "sea" },
@@ -167,7 +167,7 @@ export const shikoku: RegionContent = {
       paragraphs: [
         "O-Bon, festival des Morts, célébré à Tokushima du 12 au 15 août, est la célébration la plus animée du Japon. Les danses particulières, appelées Awa-Odori, accueillent l'arrivée annuelle des esprits des ancêtres sur la terre des vivants. Surnommée « danse des fous », en raison du refrain qui dit : « Que ne danse ou ne danse-t-on, c'est idiot de ne pas danser ! », cette danse était à l'origine un hommage à l'alcool de riz (le saké) distribué aux citadins de Tokushima lors de l'achèvement d'un château.",
       ],
-      figure: { motif: "festival", aspect: 0.78, caption: "Danseuses d'Awa-Odori, Tokushima", seed: 0 },
+      figure: { motif: "festival", aspect: 0.78, caption: "Danseuses d'Awa-Odori, Tokushima", wiki: "awa-odori", seed: 0 },
     },
   ],
   pages: [
@@ -180,7 +180,7 @@ export const shikoku: RegionContent = {
           stacks: [
             {
               span: 3,
-              blocks: [{ t: "figure", photo: { motif: "sea", aspect: 2.6, caption: "Îles de la mer Intérieure, qui sépare Shikoku de Honshu et de Kyushu", seed: 2 } }],
+              blocks: [{ t: "figure", photo: { motif: "sea", aspect: 2.6, caption: "Îles de la mer Intérieure, qui sépare Shikoku de Honshu et de Kyushu", wiki: "seto-inland-sea", seed: 2 } }],
             },
           ],
         },
@@ -195,7 +195,7 @@ export const shikoku: RegionContent = {
           stacks: [
             {
               span: 2,
-              blocks: [{ t: "figure", photo: { motif: "garden", aspect: 2.1, caption: "Le pont du Ritsurin Park s'intègre dans la composition du paysage", seed: 0 } }],
+              blocks: [{ t: "figure", photo: { motif: "garden", aspect: 2.1, caption: "Le pont du Ritsurin Park s'intègre dans la composition du paysage", wiki: "ritsurin", seed: 0 } }],
             },
           ],
         },
@@ -208,7 +208,7 @@ export const shikoku: RegionContent = {
             {
               span: 1,
               blocks: [
-                { t: "figure", photo: { motif: "market", aspect: 1.2, caption: "Ascension en palanquin des marches menant au Kompira-san", seed: 1 } },
+                { t: "figure", photo: { motif: "market", aspect: 1.2, caption: "Le sanctuaire Kotohira-gu, ou Kompira-san", wiki: "kotohira", seed: 1 } },
               ],
             },
             { span: 2, blocks: [{ t: "sidebar", id: "awa-odori" }] },
@@ -220,13 +220,13 @@ export const shikoku: RegionContent = {
               span: 1,
               blocks: [
                 { t: "poi", id: "naruto" },
-                { t: "figure", photo: { motif: "bridge", aspect: 0.8, caption: "Pont suspendu achevé en 1985, Naruto", seed: 0 } },
+                { t: "figure", photo: { motif: "bridge", aspect: 0.8, caption: "Pont suspendu achevé en 1985, Naruto", wiki: "onaruto-bridge", seed: 0 } },
               ],
             },
             { span: 1, blocks: [{ t: "poi", id: "tokushima" }] },
             {
               span: 1,
-              blocks: [{ t: "figure", photo: { motif: "market", aspect: 0.85, caption: "Salle d'offrandes votives du Kompira-san", seed: 2 } }],
+              blocks: [{ t: "figure", photo: { motif: "market", aspect: 0.85, caption: "Le détroit de Naruto, où naissent les tourbillons", wiki: "naruto", seed: 2 } }],
             },
           ],
         },
@@ -237,7 +237,7 @@ export const shikoku: RegionContent = {
         {
           stacks: [
             { span: 2, blocks: [{ t: "poi", id: "matsuyama" }] },
-            { span: 1, blocks: [{ t: "figure", photo: { motif: "castle", aspect: 0.9, caption: "Matsuyama Castle, bâti en 1603, reconstruit en 1835", seed: 2 } }] },
+            { span: 1, blocks: [{ t: "figure", photo: { motif: "castle", aspect: 0.9, caption: "Dogo Onsen Honkan, à Matsuyama", wiki: "dogo-onsen", seed: 2 } }] },
           ],
         },
       ],

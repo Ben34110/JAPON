@@ -11,7 +11,7 @@ import { GuidedTourControls } from "./GuidedTourControls";
 import { RegionColumnsLayout } from "./RegionColumnsLayout";
 import { RegionMapPanel } from "./RegionMapPanel";
 
-/** Vue détaillée d'une région : carte synchronisée à gauche, pages du guide à droite. */
+/** Vue détaillée d'une région : tout tient dans l'écran — carte synchronisée à gauche, pages du guide à droite. */
 export function RegionView({ regionId }: { regionId: RegionId }) {
   const { session, backToMap, openRegion, activatePoi, startTour, stopTour, step, goto } = useApp();
   const region = REGION_BY_ID[regionId];
@@ -25,22 +25,6 @@ export function RegionView({ regionId }: { regionId: RegionId }) {
     () => content.pois.map((p) => ({ id: p.id, name: p.name, nameJa: p.nameJa, marker: p.marker })),
     [content.pois],
   );
-
-  // texte ⇄ carte : on fait défiler la page vers le site actif (sauf si le clic vient du texte)
-  const nonce = session?.nonce ?? 0;
-  const source = session?.source;
-  useEffect(() => {
-    if (!activePoiId || source === "text") return;
-    const el = document.getElementById(`poi-${activePoiId}`);
-    el?.scrollIntoView({ behavior: source === "init" ? "auto" : "smooth", block: "start" });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nonce, activePoiId]);
-
-  // ouverture d'un chapitre sans site actif : on repart du haut
-  useEffect(() => {
-    if (!activePoiId) window.scrollTo({ top: 0 });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [regionId]);
 
   // clavier : ← → pour la visite, Échap pour la quitter
   useEffect(() => {
@@ -58,10 +42,10 @@ export function RegionView({ regionId }: { regionId: RegionId }) {
   const vars = { "--region": region.color, "--on-region": region.onColor } as CSSProperties;
 
   return (
-    <div style={vars} data-mode={tourMode ? "tour" : "free"} className="min-h-dvh">
+    <div style={vars} data-mode={tourMode ? "tour" : "free"} className="flex h-dvh flex-col overflow-hidden">
       {/* Bandeau noir, comme le dos du guide */}
-      <header className="sticky top-0 z-30" style={{ background: "#0b0b0b", color: "#fff" }}>
-        <div className="mx-auto flex max-w-[1440px] items-center gap-3 px-3 py-2 sm:px-5">
+      <header className="shrink-0" style={{ background: "#0b0b0b", color: "#fff" }}>
+        <div className="mx-auto flex max-w-[1500px] items-center gap-3 px-3 py-2 sm:px-5">
           <button type="button" onClick={backToMap} className="f-gothic group flex items-center gap-2 border border-white/40 px-3 py-1.5 text-[12px] font-bold uppercase tracking-[0.14em] transition-colors hover:bg-white hover:text-black" aria-label="Retour à la carte générale">
             <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
               <path d="M9 2 4 7l5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -103,8 +87,8 @@ export function RegionView({ regionId }: { regionId: RegionId }) {
         <div style={{ height: 4, background: region.color }} />
       </header>
 
-      <div className="mx-auto grid max-w-[1440px] gap-6 px-3 py-6 sm:px-5 lg:grid-cols-[minmax(380px,0.82fr)_minmax(0,1.3fr)] lg:gap-10 lg:py-8">
-        <aside className="max-lg:sticky max-lg:top-[54px] max-lg:z-20 lg:sticky lg:top-[78px] lg:max-h-[calc(100dvh-96px)] lg:self-start lg:overflow-y-auto lg:pr-1">
+      <div className="mx-auto grid min-h-0 w-full max-w-[1500px] flex-1 gap-4 px-3 py-3 max-lg:grid-rows-[minmax(0,34dvh)_minmax(0,1fr)] sm:px-5 lg:grid-cols-[minmax(360px,0.78fr)_minmax(0,1.3fr)] lg:grid-rows-[minmax(0,1fr)] lg:gap-8 lg:py-4">
+        <aside className="min-h-0 lg:self-start">
           <RegionMapPanel
             region={region}
             content={content}
@@ -114,8 +98,21 @@ export function RegionView({ regionId }: { regionId: RegionId }) {
           />
         </aside>
 
-        <main className="min-w-0 pb-40 lg:pr-10">
-          <RegionColumnsLayout region={region} content={content} activePoiId={activePoiId} onSelectPoi={(id) => activatePoi(id, "text")} />
+        <main className="flex h-full min-h-0 min-w-0 flex-col max-lg:px-3 lg:pl-1 lg:pr-9">
+          <RegionColumnsLayout
+            key={regionId}
+            region={region}
+            content={content}
+            activePoiId={activePoiId}
+            nonce={session?.nonce ?? 0}
+            source={session?.source}
+            tourMode={tourMode}
+            onSelectPoi={(id) => activatePoi(id, "text")}
+            onStartTour={startTour}
+            tourBar={
+              <GuidedTourControls steps={steps} index={tourIndex} onPrev={() => step(-1)} onNext={() => step(1)} onGoto={goto} onExit={stopTour} />
+            }
+          />
         </main>
       </div>
 
@@ -137,17 +134,6 @@ export function RegionView({ regionId }: { regionId: RegionId }) {
           );
         })}
       </nav>
-
-      {tourMode && (
-        <GuidedTourControls
-          steps={steps}
-          index={tourIndex}
-          onPrev={() => step(-1)}
-          onNext={() => step(1)}
-          onGoto={goto}
-          onExit={stopTour}
-        />
-      )}
     </div>
   );
 }

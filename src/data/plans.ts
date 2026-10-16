@@ -54,9 +54,9 @@ function streets(seed: number, step = 46): string {
   return parts.join(" ");
 }
 
-export const PLANS: Record<"tokyo" | "kyoto", PlanData> = {
-  tokyo: {
-    title: "Le nord de Tokyo",
+export const PLANS: Record<string, PlanData> = {
+  "tokyo-nord": {
+    title: "Le Nord de Tokyo",
     background: "#f2eec8",
     layers: [
       { d: streets(7), stroke: "#ffffff", width: 5, opacity: 0.95 },
@@ -104,6 +104,94 @@ export const PLANS: Record<"tokyo" | "kyoto", PlanData> = {
       { text: "Sensō-ji", x: 868, y: 292, kind: "place", anchor: "end" },
       { text: "Ligne JR Yamanote", x: 590, y: 96, kind: "line", rotate: 87 },
       { text: "Ligne Ginza", x: 692, y: 424, kind: "line", rotate: 1 },
+    ],
+  },
+  "tokyo-centre": {
+    title: "Le Centre de Tokyo",
+    background: "#f2eec8",
+    layers: [
+      { d: streets(11), stroke: "#ffffff", width: 5, opacity: 0.95 },
+      { d: streets(52, 90), stroke: "#ffffff", width: 9, opacity: 0.95 },
+      // baie de Tokyo (sud-est)
+      { d: "M690 905 C 790 870 900 900 1010 860 L1010 1010 L690 1010Z", fill: "#a8d6e8", stroke: "#8fc6de", width: 2 },
+      // Sumida
+      { d: "M1015 120 C 960 260 985 380 950 520 S 930 700 960 840", stroke: "#a8d6e8", width: 44, cap: "butt" },
+      // douves et jardins du Palais impérial
+      { d: "M318 292 Q318 262 350 262 L520 262 Q552 262 552 294 L552 520 Q552 556 518 556 L352 556 Q318 556 318 522Z", fill: "#bfdc9c", stroke: "#8fb86a", width: 2 },
+      { d: "M300 276 Q300 244 336 244 L536 244 Q570 244 570 280 L570 536 Q570 574 534 574 L336 574 Q300 574 300 536Z", stroke: "#a8d6e8", width: 14 },
+      // parc de Hibiya
+      { d: "M468 604 L580 598 L588 676 L474 684Z", fill: "#bfdc9c", stroke: "#8fb86a", width: 2 },
+      // jardin Hamarikyu
+      { d: "M810 770 L915 764 L920 858 L816 866Z", fill: "#bfdc9c", stroke: "#8fb86a", width: 2 },
+      { d: "M810 770 L915 764 L920 858 L816 866Z", stroke: "#a8d6e8", width: 8 },
+      // JR Yamanote / Chuo
+      { d: "M596 -10 L632 240 L646 462 L630 640 L690 790 L712 1010", stroke: "#111111", width: 7, cap: "butt" },
+      { d: "M596 -10 L632 240 L646 462 L630 640 L690 790 L712 1010", stroke: "#ffffff", width: 3, dash: "10 10", cap: "butt" },
+      // Marunouchi (rouge), Ginza (orange), Hibiya (argent)
+      { d: "M120 440 L 360 452 L 646 468 L 760 340 L 780 160", stroke: "#d2232a", width: 6, cap: "round" },
+      { d: "M300 640 L 520 630 L 756 664 L 960 700", stroke: "#f39700", width: 6, cap: "round" },
+      { d: "M650 250 L 700 560 L 756 664 L 870 800", stroke: "#9aa5ad", width: 6, cap: "round" },
+    ],
+    stations: [
+      { x: 646, y: 466, name: "Tokyo", dx: 14, dy: -12 },
+      { x: 756, y: 664, name: "Ginza", dx: 14, dy: 26 },
+      { x: 700, y: 560, name: "Hibiya", dx: -62, dy: 4 },
+      { x: 632, y: 238, name: "Kanda", dx: 14, dy: 4 },
+      { x: 870, y: 800, name: "Tsukijishijo", dx: -92, dy: 34 },
+    ],
+    labels: [
+      { text: "Palais impérial", x: 436, y: 330, kind: "park" },
+      { text: "Hibiya-koen", x: 528, y: 646, kind: "park" },
+      { text: "Hamarikyu", x: 866, y: 838, kind: "park" },
+      { text: "Sumida-gawa", x: 960, y: 420, kind: "water", rotate: 84 },
+      { text: "Baie de Tokyo", x: 860, y: 950, kind: "water" },
+      { text: "Marunouchi", x: 540, y: 470, kind: "district" },
+      { text: "Yaesu", x: 700, y: 430, kind: "district" },
+      { text: "Ligne JR Yamanote", x: 606, y: 120, kind: "line", rotate: 83 },
+      { text: "Ligne Ginza", x: 410, y: 618, kind: "line", rotate: 1 },
+    ],
+  },
+  "tokyo-ouest": {
+    title: "L’Ouest de Tokyo",
+    background: "#f2eec8",
+    layers: [
+      { d: streets(71), stroke: "#ffffff", width: 5, opacity: 0.95 },
+      { d: streets(93, 90), stroke: "#ffffff", width: 9, opacity: 0.95 },
+      // forêt du Meiji-jingu et parc de Yoyogi
+      { d: "M318 392 C 300 450 318 560 352 600 L 470 612 C 520 560 508 450 480 398 Z", fill: "#a8cd86", stroke: "#7da65a", width: 2 },
+      { d: "M500 472 L 600 466 L 612 580 L 506 588Z", fill: "#bfdc9c", stroke: "#8fb86a", width: 2 },
+      // Shinjuku-gyoen
+      { d: "M586 196 L 716 188 L 726 300 L 594 310Z", fill: "#bfdc9c", stroke: "#8fb86a", width: 2 },
+      // Aoyama / cimetière, Roppongi Hills
+      { d: "M700 590 L 790 584 L 800 660 L 706 668Z", fill: "#cfe3b0", opacity: 0.85 },
+      // rivière Shibuya (canalisée)
+      { d: "M560 640 C 520 740 560 860 500 1010", stroke: "#a8d6e8", width: 14, cap: "butt" },
+      // JR Yamanote
+      { d: "M170 -10 L 300 130 L 350 252 L 420 420 L 440 574 L 470 774 L 560 1010", stroke: "#111111", width: 7, cap: "butt" },
+      { d: "M170 -10 L 300 130 L 350 252 L 420 420 L 440 574 L 470 774 L 560 1010", stroke: "#ffffff", width: 3, dash: "10 10", cap: "butt" },
+      // JR Chuo
+      { d: "M-10 266 L 350 254", stroke: "#111111", width: 6, cap: "butt" },
+      { d: "M-10 266 L 350 254", stroke: "#ffffff", width: 2.5, dash: "9 9", cap: "butt" },
+      // Ginza (orange) vers Shibuya, Hanzomon (violet), Oedo (magenta)
+      { d: "M470 774 L 640 700 L 790 630 L 960 560", stroke: "#f39700", width: 6, cap: "round" },
+      { d: "M470 774 L 580 560 L 700 410 L 960 250", stroke: "#8f76d6", width: 6, cap: "round" },
+      { d: "M350 254 L 560 420 L 700 560 L 800 730", stroke: "#b6007a", width: 6, cap: "round" },
+    ],
+    stations: [
+      { x: 350, y: 254, name: "Shinjuku", dx: -66, dy: -14 },
+      { x: 440, y: 574, name: "Harajuku", dx: 14, dy: 22 },
+      { x: 470, y: 774, name: "Shibuya", dx: 14, dy: 24 },
+      { x: 800, y: 730, name: "Roppongi", dx: 14, dy: 26 },
+      { x: 420, y: 420, name: "Yoyogi", dx: -60, dy: 4 },
+    ],
+    labels: [
+      { text: "Meiji-jingu", x: 402, y: 506, kind: "park" },
+      { text: "Yoyogi-koen", x: 556, y: 532, kind: "park" },
+      { text: "Shinjuku-gyoen", x: 656, y: 252, kind: "park" },
+      { text: "Omotesando", x: 590, y: 640, kind: "district", rotate: -24 },
+      { text: "Kabukicho", x: 420, y: 202, kind: "district" },
+      { text: "Ligne JR Yamanote", x: 230, y: 160, kind: "line", rotate: 48 },
+      { text: "Ligne Oedo", x: 700, y: 668, kind: "line", rotate: 54 },
     ],
   },
   kyoto: {

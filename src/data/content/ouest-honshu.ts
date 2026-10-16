@@ -12,7 +12,7 @@ export const ouestHonshu: RegionContent = {
       "De la baie d'Osaka aux rivages de la mer Intérieure, l'ouest de Honshu fut le berceau de l'État japonais. Nara, première capitale permanente, Himeji et son château blanc, Hiroshima et la mémoire de 1945 : peu de régions concentrent autant d'histoire sur si peu de distance.",
       "Osaka, la ville des marchands, y fait contrepoint avec son appétit légendaire — « manger jusqu'à la ruine », dit le proverbe — et son humour.",
     ],
-    figure: { motif: "pagoda", aspect: 0.55, caption: "Pagode du Yakushi-ji, Nara", seed: 1 },
+    figure: { motif: "pagoda", aspect: 0.55, caption: "Pagode du Yakushi-ji, Nara", wiki: "yakushi-ji", seed: 1 },
   },
   mapLabels: [
     { text: "Mer du Japon", geo: [133.3, 36.0], kind: "sea" },
@@ -137,8 +137,8 @@ export const ouestHonshu: RegionContent = {
         {
           stacks: [
             { span: 1, blocks: [{ t: "poi", id: "osaka" }] },
-            { span: 1, blocks: [{ t: "figure", photo: { motif: "skyline", aspect: 1.1, caption: "Dotonbori, la nuit", seed: 1 } }, { t: "poi", id: "nara" }] },
-            { span: 1, blocks: [{ t: "poi", id: "himeji" }, { t: "figure", photo: { motif: "castle", aspect: 0.85, caption: "Le château d'Himeji, ou « héron blanc »", seed: 0 } }] },
+            { span: 1, blocks: [{ t: "figure", photo: { motif: "skyline", aspect: 1.1, caption: "Dotonbori, la nuit", wiki: "dotonbori", seed: 1 } }, { t: "poi", id: "nara" }] },
+            { span: 1, blocks: [{ t: "poi", id: "himeji" }, { t: "figure", photo: { motif: "castle", aspect: 0.85, caption: "Le château d'Himeji, ou « héron blanc »", wiki: "himeji-castle", seed: 0 } }] },
           ],
         },
       ],
@@ -148,7 +148,7 @@ export const ouestHonshu: RegionContent = {
         {
           stacks: [
             { span: 1, blocks: [{ t: "poi", id: "hiroshima" }] },
-            { span: 2, blocks: [{ t: "figure", photo: { motif: "sea", aspect: 2.1, caption: "Le grand torii d'Itsukushima, à marée haute", seed: 2 } }, { t: "poi", id: "miyajima" }] },
+            { span: 2, blocks: [{ t: "figure", photo: { motif: "sea", aspect: 2.1, caption: "Le grand torii d'Itsukushima, à marée haute", wiki: "itsukushima", seed: 2 } }, { t: "poi", id: "miyajima" }] },
           ],
         },
       ],

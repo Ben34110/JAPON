@@ -9,6 +9,10 @@ export interface MapPin {
   name: string;
   x: number;
   y: number;
+  /** repère de groupe (carte large) : regroupe plusieurs sites voisins */
+  memberIds?: string[];
+  /** côté du libellé d'un groupe de repères */
+  labelDir?: "top" | "bottom" | "left" | "right";
 }
 
 export interface ViewBox {
@@ -68,6 +72,8 @@ interface Props {
   children: ReactNode;
   overlay?: (vb: ViewBox) => ReactNode;
   className?: string;
+  /** carré qui occupe au mieux le conteneur (largeur et hauteur) */
+  fit?: boolean;
 }
 
 /**
@@ -87,9 +93,11 @@ export function MapCanvas({
   children,
   overlay,
   className = "",
+  fit = false,
 }: Props) {
   const [W, H] = size;
-  const active = pins.find((p) => p.id === activeId) ?? null;
+  const isPinActive = (p: MapPin) => (p.memberIds ? !!activeId && p.memberIds.includes(activeId) : p.id === activeId);
+  const active = pins.find(isPinActive) ?? null;
 
   const target = useMemo<ViewBox>(() => {
     if (!zoom || !active) return { x: 0, y: 0, w: W, h: H };
@@ -106,15 +114,17 @@ export function MapCanvas({
   const vb = useAnimatedViewBox(target);
   const k = vb.w / W;
 
-  const ordered = useMemo(() => [...pins].sort((a, b) => Number(a.id === activeId) - Number(b.id === activeId)), [pins, activeId]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const ordered = useMemo(() => [...pins].sort((a, b) => Number(isPinActive(a)) - Number(isPinActive(b))), [pins, activeId]);
 
   return (
-    <div className={`relative w-full overflow-hidden ${className}`} style={{ aspectRatio: `${W} / ${H}`, background: "#cfe9f1" }}>
+    <div className={`relative overflow-hidden ${fit ? "" : "w-full"} ${className}`} style={{ aspectRatio: `${W} / ${H}`, background: "#cfe9f1", ...(fit ? { width: "min(100cqw, 100cqh)" } : {}) }}>
       <svg viewBox={`${vb.x} ${vb.y} ${vb.w} ${vb.h}`} className="absolute inset-0 h-full w-full" role="group" aria-label={ariaLabel} preserveAspectRatio="xMidYMid meet">
         <MapScaleCtx.Provider value={k}>
           {children}
           {ordered.map((p) => {
-            const isActive = p.id === activeId;
+            const isActive = isPinActive(p);
+            const cluster = !!p.memberIds;
             const left = p.x > vb.x + vb.w * 0.66;
             return (
               <g
@@ -123,7 +133,7 @@ export function MapCanvas({
                 transform={`translate(${p.x} ${p.y}) scale(${k})`}
                 role="button"
                 tabIndex={0}
-                aria-label={`${p.name}, repère ${p.marker}`}
+                aria-label={cluster ? `${p.name}, ${p.memberIds!.length} sites : afficher le plan` : `${p.name}, repère ${p.marker}`}
                 aria-pressed={isActive}
                 onClick={() => onPinClick(p.id)}
                 onKeyDown={(e) => {
@@ -136,30 +146,35 @@ export function MapCanvas({
               >
                 <title>{fr(p.name)}</title>
                 {isActive && <circle r="24" fill={color} className="gv-pulse" style={{ transformBox: "fill-box", transformOrigin: "center", animation: "gv-pulse 1.9s ease-out infinite" }} />}
-                <circle r={isActive ? 24 : 18} fill={isActive ? color : "#111"} stroke={isActive ? "#111" : "#fff"} strokeWidth={isActive ? 3.2 : 2.6} style={{ transition: "fill 0.3s" }} />
+                <circle r={cluster ? 25 : isActive ? 24 : 18} fill={isActive ? color : cluster ? "#fff" : "#111"} stroke={isActive || cluster ? "#111" : "#fff"} strokeWidth={cluster ? 3.4 : isActive ? 3.2 : 2.6} style={{ transition: "fill 0.3s" }} />
                 <text
                   textAnchor="middle"
                   dy="0.36em"
                   fontSize={isActive ? 25 : 20}
                   fontWeight="700"
-                  fill={isActive ? onColor : "#fff"}
+                  fill={isActive ? onColor : cluster ? "#111" : "#fff"}
                   style={{ fontFamily: "var(--font-gothic)", fontStretch: "75%", fontVariationSettings: '"wdth" 75', pointerEvents: "none" }}
                 >
                   {p.marker}
                 </text>
-                {isActive && (
-                  <g transform={`translate(${left ? -32 : 32} 0)`} style={{ pointerEvents: "none" }}>
-                    <text
-                      textAnchor={left ? "end" : "start"}
-                      dy="0.34em"
-                      fontSize="30"
-                      style={{ fontFamily: "var(--font-garamond)", fontWeight: 600, paintOrder: "stroke", stroke: "#fffdf6", strokeWidth: 8, strokeLinejoin: "round" }}
-                      fill="#111"
-                    >
-                      {fr(p.name)}
-                    </text>
-                  </g>
-                )}
+                {(isActive || cluster) &&
+                  (() => {
+                    const dir = p.labelDir ?? (left ? "left" : "right");
+                    const lt = { right: [32, 0, "start"], left: [-32, 0, "end"], top: [0, -44, "middle"], bottom: [0, 48, "middle"] }[dir] as [number, number, "start" | "end" | "middle"];
+                    return (
+                      <g transform={`translate(${lt[0]} ${lt[1]})`} style={{ pointerEvents: "none" }}>
+                        <text
+                          textAnchor={lt[2]}
+                          dy="0.34em"
+                          fontSize="30"
+                          style={{ fontFamily: "var(--font-garamond)", fontWeight: 600, paintOrder: "stroke", stroke: "#fffdf6", strokeWidth: 8, strokeLinejoin: "round" }}
+                          fill="#111"
+                        >
+                          {fr(p.name)}
+                        </text>
+                      </g>
+                    );
+                  })()}
               </g>
             );
           })}

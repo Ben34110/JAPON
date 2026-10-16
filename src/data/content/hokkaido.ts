@@ -12,7 +12,7 @@ export const hokkaido: RegionContent = {
       "Colonisée tardivement, à partir de 1869, la grande île du Nord garde un esprit de frontière : espaces immenses, villes tracées au cordeau, élevages laitiers et champs de lavande. Les Aïnous, premiers habitants de l'île, y ont laissé leur nom — Hokkaido signifie « route de la mer du Nord » — et une culture que l'on redécouvre.",
       "L'hiver, long et neigeux, attire skieurs et amateurs de sources chaudes ; l'été, doux et sec, est la meilleure saison pour randonner dans les parcs nationaux.",
     ],
-    figure: { motif: "snow", aspect: 0.55, caption: "Forêt sous la neige, près de Furano", seed: 0 },
+    figure: { motif: "snow", aspect: 0.55, caption: "Furano, station de ski au cœur de l'île", wiki: "furano", seed: 0 },
   },
   mapLabels: [
     { text: "Mer du Japon", geo: [140.1, 43.7], kind: "sea" },
@@ -94,12 +94,12 @@ export const hokkaido: RegionContent = {
         {
           stacks: [
             { span: 1, blocks: [{ t: "poi", id: "sapporo" }] },
-            { span: 1, blocks: [{ t: "figure", photo: { motif: "harbor", aspect: 1.1, caption: "Le port de Hakodate, avec ses entrepôts de briques", seed: 2 } }, { t: "poi", id: "hakodate" }] },
+            { span: 1, blocks: [{ t: "figure", photo: { motif: "harbor", aspect: 1.1, caption: "Le port de Hakodate, avec ses entrepôts de briques", wiki: "hakodate-mountain", seed: 2 } }, { t: "poi", id: "hakodate" }] },
             { span: 1, blocks: [{ t: "poi", id: "shiretoko" }] },
           ],
         },
         {
-          stacks: [{ span: 3, blocks: [{ t: "figure", photo: { motif: "mountain", aspect: 3.2, caption: "Les monts de Shiretoko, au-dessus de la mer d'Okhotsk", seed: 1 } }] }],
+          stacks: [{ span: 3, blocks: [{ t: "figure", photo: { motif: "mountain", aspect: 3.2, caption: "Sentier dans la péninsule de Shiretoko", wiki: "shiretoko", seed: 1 } }] }],
         },
       ],
     },

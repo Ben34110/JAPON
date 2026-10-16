@@ -12,7 +12,7 @@ export const centreHonshu: RegionContent = {
       "Entre la mer du Japon et l'océan Pacifique, le centre de Honshu est hérissé de montagnes : les Alpes japonaises culminent à plus de trois mille mètres et donnent naissance aux grands fleuves qui irriguent les plaines. Les hivers y sont rudes — la côte nord reçoit parmi les plus fortes chutes de neige du monde habité — et les étés, courts et lumineux.",
       "Ce relief a préservé des villes de caractère, longtemps à l'écart des grands axes : Kanazawa, riche de ses jardins et de ses artisans, Takayama, avec ses maisons de marchands brunies par le temps. Au sud, le mont Fuji, cône parfait de 3 776 m, règne sur l'horizon.",
     ],
-    figure: { motif: "gate", aspect: 0.8, cutout: true, caption: "Porte originale du sanctuaire Oyama" },
+    figure: { motif: "gate", aspect: 0.8, caption: "Porte originale du sanctuaire Oyama", wiki: "oyama" },
   },
   mapLabels: [
     { text: "Mer du Japon", geo: [136.9, 37.5], kind: "sea" },
@@ -108,7 +108,7 @@ export const centreHonshu: RegionContent = {
           stacks: [
             {
               span: 3,
-              blocks: [{ t: "figure", photo: { motif: "street", aspect: 3.4, caption: "Rue bordée de façades de terre à Nagamachi", seed: 1 } }],
+              blocks: [{ t: "figure", photo: { motif: "street", aspect: 3.4, caption: "Le château de Kanazawa et ses remparts", wiki: "kanazawa-castle", seed: 1 } }],
             },
           ],
         },
@@ -117,7 +117,7 @@ export const centreHonshu: RegionContent = {
           stacks: [
             {
               span: 2,
-              blocks: [{ t: "figure", photo: { motif: "cherry", aspect: 1.5, caption: "Harmonie printanière au jardin Kenroku-en", seed: 0 } }],
+              blocks: [{ t: "figure", photo: { motif: "cherry", aspect: 1.5, caption: "La lanterne Kotoji, au jardin Kenroku-en", wiki: "kenrokuen", seed: 0 } }],
             },
           ],
         },
@@ -130,14 +130,14 @@ export const centreHonshu: RegionContent = {
             {
               span: 2,
               blocks: [
-                { t: "figure", photo: { motif: "street", aspect: 2.2, caption: "Maisons de marchands du quartier de Sanmachi-suji, Takayama", seed: 2 } },
+                { t: "figure", photo: { motif: "street", aspect: 2.2, caption: "Takayama sous la neige, au cœur des Alpes japonaises", wiki: "takayama", seed: 2 } },
                 { t: "poi", id: "takayama" },
               ],
             },
             {
               span: 1,
               blocks: [
-                { t: "figure", photo: { motif: "mountain", aspect: 0.8, caption: "Le mont Fuji, au-dessus d'un temple de Kawaguchiko", seed: 0 } },
+                { t: "figure", photo: { motif: "mountain", aspect: 0.8, caption: "Le mont Fuji, cône presque parfait", wiki: "mont-fuji", seed: 0 } },
                 { t: "poi", id: "mont-fuji" },
               ],
             },

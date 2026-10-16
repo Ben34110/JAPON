@@ -47,6 +47,8 @@ export interface PhotoSpec {
   src?: string;
   /** graine pour varier les teintes */
   seed?: number;
+  /** clé d'une photographie Wikimedia Commons (voir src/data/photos.generated.ts) */
+  wiki?: string;
 }
 
 export type AddressIcon =
@@ -110,6 +112,8 @@ export interface Poi {
   /** paragraphes — `**gras**`, `*italique*`, `^{e}` */
   body: string[];
   practical?: PracticalEntry[];
+  /** secteur du chapitre (ex. Tokyo : centre / nord / ouest) */
+  section?: string;
   /** figurine détourée ou photo flottant à côté des fiches (ex. garde de château) */
   aside?: PhotoSpec;
 }
@@ -165,6 +169,10 @@ export interface RegionContent {
   pages: BookPage[];
   mapLabels: MapLabel[];
   mapTitle: string;
+  /** nom du groupe de repères voisins, sur la carte large (ex. « Nord de Tokyo ») */
+  clusterLabel?: string;
+  /** sous-chapitres (Tokyo : Le Centre, Le Nord, L'Ouest) — un plan par secteur */
+  sections?: { id: string; name: string; short: string; pages?: [number, number]; labelDir?: "top" | "bottom" | "left" | "right" }[];
 }
 
 export interface Region {
@@ -178,5 +186,6 @@ export interface Region {
   summary: string;
   highlights: string[];
   photo: PhotoSpec;
-  mapKind: "geo" | "plan";
+  /** « both » : carte régionale large + plan de quartier */
+  mapKind: "geo" | "plan" | "both";
 }

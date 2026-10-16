@@ -160,9 +160,18 @@ const FOCUS = {
     [138.4, 36.9],
     [142.2, 41.6],
   ],
+  // vues larges pour les chapitres « villes » : excursions Kamakura / Nara
+  tokyo: [
+    [139.33, 35.24],
+    [140.0, 35.84],
+  ],
+  kyoto: [
+    [135.3, 34.55],
+    [136.2, 35.3],
+  ],
 };
 const detail = {};
-const DETAIL_REGIONS = ["hokkaido", "nord-honshu", "centre-honshu", "ouest-honshu", "shikoku", "kyushu", "okinawa"];
+const DETAIL_REGIONS = ["tokyo", "kyoto", "hokkaido", "nord-honshu", "centre-honshu", "ouest-honshu", "shikoku", "kyushu", "okinawa"];
 for (const r of DETAIL_REGIONS) {
   const regionFeats = features.filter((f) => f.properties.region === r);
   const target =

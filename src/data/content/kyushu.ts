@@ -13,7 +13,7 @@ export const kyushu: RegionContent = {
       "Porte du Japon vers le continent et vers l'Occident, l'île vit débarquer les premiers marchands portugais en 1543, puis abrita pendant plus de deux siècles le seul comptoir européen toléré par les shoguns. Cette longue histoire d'échanges a laissé des églises, des quartiers étrangers et une cuisine métissée.",
       "Plus au sud, la nature reprend ses droits : du mont Aso à Sakurajima, les fumerolles rappellent à chaque instant que Kyushu est un pays de feu.",
     ],
-    figure: { motif: "doll", aspect: 0.5, cutout: true, caption: "Poupée de Hakata, Fukuoka" },
+    figure: { motif: "doll", aspect: 0.5, cutout: true, caption: "Poupée de Hakata, Fukuoka", wiki: "hakata-doll" },
   },
   mapLabels: [
     { text: "Mer de Chine orientale", geo: [129.62, 31.5], kind: "sea", rotate: -8 },
@@ -206,7 +206,7 @@ export const kyushu: RegionContent = {
         "Lorsque le port de Nagasaki s'ouvrit au commerce international, en 1571, les Portugais et les Hollandais s'y manifestèrent, suivis de marchands chinois qui fondèrent leur propre communauté. Véhiculant des fusils et des missionnaires, les cargos portugais furent à l'origine de périodes de rébellion et de persécution. Seuls les Hollandais participèrent à des échanges commerciaux jusqu'en 1854, depuis leur comptoir de Dejima.",
         "À la réouverture du port, des délégations commerciales britanniques, américaines, françaises, allemandes et prussiennes s'y présentèrent. L'héritage de ces nombreux contacts est illustré par quelques festivals locaux et par quelques plats cuisinés : le *champon*, soupe de nouilles aux fruits de mer, et le *kasutera*, gâteau hérité des Portugais.",
       ],
-      figure: { motif: "ship", aspect: 0.82, caption: "Réplique du *Prince Willem*, dans le village hollandais", seed: 1 },
+      figure: { motif: "ship", aspect: 0.82, caption: "Nagasaki et sa baie, vues depuis le Glover Garden", wiki: "nagasaki", seed: 1 },
     },
     {
       id: "pays-du-feu",
@@ -237,10 +237,6 @@ export const kyushu: RegionContent = {
                 },
               ],
             },
-            {
-              span: 2,
-              blocks: [{ t: "figure", photo: { motif: "harbor", aspect: 1.9, caption: "Le port de Nagasaki, vu depuis les hauteurs de la ville", seed: 0 } }],
-            },
           ],
         },
       ],
@@ -252,14 +248,14 @@ export const kyushu: RegionContent = {
             {
               span: 2,
               blocks: [
-                { t: "figure", photo: { motif: "tulips", aspect: 1.75, caption: "Tulipes le long du canal d'Huis ten Bosch", seed: 0 } },
+                { t: "figure", photo: { motif: "tulips", aspect: 1.75, caption: "Huis ten Bosch, village hollandais reconstitué", wiki: "huis-ten-bosch", seed: 0 } },
                 { t: "poi", id: "nagasaki" },
               ],
             },
             {
               span: 1,
               blocks: [
-                { t: "figure", photo: { motif: "mountain", aspect: 0.8, caption: "Le magnifique col de Nita, péninsule de Shimabara", seed: 2 } },
+                { t: "figure", photo: { motif: "mountain", aspect: 0.8, caption: "Le mont Unzen, volcan de la péninsule de Shimabara", wiki: "mont-unzen", seed: 2 } },
                 { t: "poi", id: "shimabara" },
               ],
             },
@@ -275,16 +271,15 @@ export const kyushu: RegionContent = {
             {
               span: 2,
               blocks: [
-                { t: "figure", photo: { motif: "castle", aspect: 1.5, caption: "Toits et avant-toits du Kumamoto Castle, l'une des grandes forteresses du Japon", seed: 0 } },
+                { t: "figure", photo: { motif: "castle", aspect: 1.5, caption: "Toits et avant-toits du Kumamoto Castle, l'une des grandes forteresses du Japon", wiki: "kumamoto-castle", seed: 0 } },
                 { t: "poi", id: "kumamoto" },
               ],
             },
             {
               span: 1,
               blocks: [
-                { t: "figure", photo: { motif: "volcano", aspect: 0.8, caption: "Cratère fumant du mont Nakadake", seed: 1 } },
+                { t: "figure", photo: { motif: "volcano", aspect: 0.8, caption: "La caldeira du mont Aso, vue du ciel", wiki: "mont-aso", seed: 1 } },
                 { t: "poi", id: "mont-aso" },
-                { t: "figure", photo: { motif: "sulfur", aspect: 1.25, caption: "Roches sulfureuses en vente à la station de téléphérique de Nakadake", seed: 0 } },
               ],
             },
           ],
@@ -299,7 +294,8 @@ export const kyushu: RegionContent = {
             {
               span: 1,
               blocks: [
-                { t: "figure", photo: { motif: "volcano", aspect: 1, caption: "Sakurajima, face à la baie de Kagoshima", seed: 2 } },
+                { t: "figure", photo: { motif: "volcano", aspect: 1.9, caption: "Sakurajima, le volcan qui domine la baie de Kagoshima", wiki: "sakurajima", seed: 2 } },
+                { t: "figure", photo: { motif: "volcano", aspect: 1, caption: "Le jardin Sengan-en, à Kagoshima", wiki: "sengan-en", seed: 2 } },
                 { t: "sidebar", id: "pays-du-feu" },
               ],
             },

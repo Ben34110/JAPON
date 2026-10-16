@@ -10,8 +10,6 @@ import { RichText } from "./RichText";
 
 interface Props {
   poi: Poi;
-  /** nombre de colonnes occupées dans la page */
-  span: 1 | 2 | 3;
   active: boolean;
   onSelect: (poiId: string) => void;
 }
@@ -20,12 +18,12 @@ interface Props {
  * Un site du guide : titre Garamond + pastille numérotée + kanji, filet,
  * bloc de métadonnées, texte justifié à lettrine Didone, fiches pratiques.
  */
-export function PointOfInterestItem({ poi, span, active, onSelect }: Props) {
+export function PointOfInterestItem({ poi, active, onSelect }: Props) {
   const { meta } = poi;
   return (
     <article id={`poi-${poi.id}`} className={`gv-poi ${active ? "is-active" : ""}`} data-poi={poi.id} aria-current={active ? "true" : undefined}>
-      <div className="gv-multi" data-span={span}>
-        <header className="gv-poi-head no-split" style={{ breakAfter: "avoid" }}>
+      <div>
+        <header className="gv-poi-head" style={{ breakAfter: "avoid" }}>
           <button
             type="button"
             className="gv-poi-title"
@@ -82,7 +80,7 @@ export function PointOfInterestItem({ poi, span, active, onSelect }: Props) {
           </div>
         )}
         {poi.aside && (
-          <figure className="gv-figure no-split" data-cutout={poi.aside.cutout ? "true" : undefined} style={{ margin: "10px auto 0", width: poi.aside.cutout ? "38%" : "70%", minWidth: 70 }}>
+          <figure className="gv-figure" data-cutout={poi.aside.cutout ? "true" : undefined} style={{ margin: "10px auto 0", width: poi.aside.cutout ? "38%" : "70%", minWidth: 70 }}>
             <div className="frame">
               <PhotoPlaceholder spec={poi.aside} />
             </div>
