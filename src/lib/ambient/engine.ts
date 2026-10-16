@@ -24,6 +24,7 @@ class AmbientEngine {
   private current: Instance | null = null;
   private volume = 0.7;
   private wanted: string | null = null;
+  private live = 0;
 
   /** À appeler dans un gestionnaire de clic / touche. */
   unlock(): boolean {
@@ -62,7 +63,7 @@ class AmbientEngine {
 
   /** état courant (diagnostic) */
   debug() {
-    return { ready: !!this.ctx, state: this.ctx?.state ?? null, track: this.current?.id ?? null, wanted: this.wanted };
+    return { ready: !!this.ctx, state: this.ctx?.state ?? null, track: this.current?.id ?? null, wanted: this.wanted, live: this.live };
   }
 
   setVolume(v: number) {
@@ -81,13 +82,14 @@ class AmbientEngine {
     this.current = this.start(id);
   }
 
-  private fadeOut(seconds = 1.4) {
+  private fadeOut(seconds = 1.2) {
     const inst = this.current;
     const ctx = this.ctx;
     this.current = null;
     if (!inst || !ctx) return;
     inst.stopped = true;
     inst.timers.forEach((t) => window.clearTimeout(t));
+    inst.timers.length = 0;
     inst.bus.gain.cancelScheduledValues(ctx.currentTime);
     inst.bus.gain.setValueAtTime(inst.bus.gain.value, ctx.currentTime);
     inst.bus.gain.linearRampToValueAtTime(0, ctx.currentTime + seconds);
@@ -101,6 +103,7 @@ class AmbientEngine {
         n.disconnect();
       });
       inst.bus.disconnect();
+      this.live--;
     }, seconds * 1000 + 400);
   }
 
@@ -113,6 +116,7 @@ class AmbientEngine {
     bus.connect(this.master!);
     const out: Out = { ctx, dry: bus, send: this.reverbIn! };
     const inst: Instance = { id: preset.id, bus, nodes: [], timers: [], stopped: false };
+    this.live++;
     const t0 = ctx.currentTime + 0.05;
     if (preset.droneGain > 0) inst.nodes.push(...startDrone(out, preset, t0));
     if (preset.noise) inst.nodes.push(...startNoise(out, preset.noise.kind, preset.noise.gain, t0));

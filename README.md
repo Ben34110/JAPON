@@ -48,7 +48,7 @@ la page `/credits` en donne l'attribution. Les figures du contenu y font référ
 
 ## Musique d'ambiance
 
-Chaque région a sa propre ambiance, **synthétisée dans le navigateur** (Web Audio, aucun fichier audio,
+Chaque région a sa propre ambiance (silence sur la carte générale tant qu'aucune région n'est sélectionnée), **synthétisée dans le navigateur** (Web Audio, aucun fichier audio,
 donc aucun droit à gérer) : gamme japonaise propre à la région (hirajoshi, in, yo, ryukyu, iwato), timbres
 de koto / shamisen / sanshin / shakuhachi / cloche, bourdon et bruits de fond (vent, mer, pluie, torrent,
 ville, neige), fondu enchaîné d'environ 1,5 s entre deux ambiances. Le son ne peut démarrer qu'après un premier clic

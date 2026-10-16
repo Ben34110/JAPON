@@ -46,8 +46,9 @@ export function AmbientProvider({ children }: { children: ReactNode }) {
   const enabled = useSyncExternalStore(subscribe, readPref, () => true);
   const [unlocked, setUnlocked] = useState(false);
 
-  const trackId = state.screen === "region" && state.regionId ? state.regionId : (state.previewId ?? "home");
-  const preset = trackFor(trackId);
+  // région ouverte → sa musique ; sur la carte générale → celle de la région présélectionnée, sinon silence
+  const trackId: string | null = state.screen === "region" && state.regionId ? state.regionId : (state.previewId ?? null);
+  const preset = trackId ? trackFor(trackId) : null;
 
   // les navigateurs n'autorisent le son qu'après un geste : le premier clic / la première touche suffit
   useEffect(() => {
@@ -64,15 +65,15 @@ export function AmbientProvider({ children }: { children: ReactNode }) {
   }, [unlocked]);
 
   useEffect(() => {
-    ambient.play(enabled && unlocked ? preset.id : null);
-  }, [enabled, unlocked, preset.id]);
+    ambient.play(enabled && unlocked ? trackId : null);
+  }, [enabled, unlocked, trackId]);
 
   const toggle = useCallback(() => {
     if (ambient.unlock()) setUnlocked(true);
     writePref(!readPref());
   }, []);
 
-  const value = useMemo<Ctx>(() => ({ enabled, playing: enabled && unlocked, label: preset.label, toggle }), [enabled, unlocked, preset.label, toggle]);
+  const value = useMemo<Ctx>(() => ({ enabled, playing: enabled && unlocked, label: preset?.label ?? "silence sur la carte générale — choisissez une région", toggle }), [enabled, unlocked, preset, toggle]);
   return <AmbientCtx.Provider value={value}>{children}</AmbientCtx.Provider>;
 }
 
