@@ -45,3 +45,12 @@ Les photographies sont des visuels SVG de substitution ; renseigner `src` dans u
 Les photos viennent de Wikimedia Commons (licences libres). `node scripts/fetch-wiki-photos.mjs` les
 télécharge dans `public/photos/` et écrit `src/data/photos.generated.ts` (auteur, licence, lien) ;
 la page `/credits` en donne l'attribution. Les figures du contenu y font référence par la clé `wiki`.
+
+## Musique d'ambiance
+
+Chaque région a sa propre ambiance, **synthétisée dans le navigateur** (Web Audio, aucun fichier audio,
+donc aucun droit à gérer) : gamme japonaise propre à la région (hirajoshi, in, yo, ryukyu, iwato), timbres
+de koto / shamisen / sanshin / shakuhachi / cloche, bourdon et bruits de fond (vent, mer, pluie, torrent,
+ville, neige), fondu enchaîné de 3 s entre deux ambiances. Le son ne peut démarrer qu'après un premier clic
+(règle des navigateurs) ; le bouton « Musique » en haut à droite le coupe, et le choix est mémorisé.
+Code : `src/lib/ambient/` (réglages par région dans `presets.ts`), `src/state/ambient.tsx`.

@@ -10,6 +10,7 @@ import { EyeLogo } from "./Icons";
 import { GuidedTourControls } from "./GuidedTourControls";
 import { RegionColumnsLayout } from "./RegionColumnsLayout";
 import { RegionMapPanel } from "./RegionMapPanel";
+import { SoundToggle } from "./SoundToggle";
 
 /** Vue détaillée d'une région : tout tient dans l'écran — carte synchronisée à gauche, pages du guide à droite. */
 export function RegionView({ regionId }: { regionId: RegionId }) {
@@ -62,6 +63,8 @@ export function RegionView({ regionId }: { regionId: RegionId }) {
             <span className="gv-collection truncate text-[12px] tracking-[0.24em] sm:text-[13px]">{fr(region.name)}</span>
             <span className="f-garamond hidden text-[12px] italic text-white/70 sm:inline">{pagesLabel(region)}</span>
           </div>
+
+          <SoundToggle className="shrink-0" />
 
           <div className="flex shrink-0 items-stretch" role="group" aria-label="Mode de navigation">
             <button

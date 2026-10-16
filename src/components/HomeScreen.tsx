@@ -7,6 +7,7 @@ import { ColorCodeFlap } from "./ColorCodeFlap";
 import { EyeLogo } from "./Icons";
 import { JapanMap } from "./JapanMap";
 import { RegionPreviewCard } from "./RegionPreviewCard";
+import { SoundToggle } from "./SoundToggle";
 
 /** Écran d'accueil : la carte d'ensemble « Le Japon région par région », entièrement visible dans l'écran. */
 export function HomeScreen() {
@@ -17,10 +18,11 @@ export function HomeScreen() {
   return (
     <div className="flex min-h-dvh flex-col md:h-dvh md:overflow-hidden">
       {/* Bandeau noir de couverture */}
-      <div className="gv-band shrink-0" role="banner">
+      <div className="gv-band relative shrink-0" role="banner">
         <span>Guides</span>
         <EyeLogo size={15} />
         <span>Voir</span>
+        <SoundToggle className="absolute right-3 top-1/2 -translate-y-1/2 !py-1" />
       </div>
 
       <div className="mx-auto flex min-h-0 w-full max-w-[1400px] flex-1 flex-col px-3 sm:px-6">

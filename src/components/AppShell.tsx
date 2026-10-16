@@ -1,6 +1,7 @@
 "use client";
 
 import { AppStateProvider, useApp } from "@/state/app-state";
+import { AmbientProvider } from "@/state/ambient";
 import { HomeScreen } from "./HomeScreen";
 import { RegionView } from "./RegionView";
 
@@ -13,7 +14,9 @@ function Screens() {
 export function AppShell() {
   return (
     <AppStateProvider>
-      <Screens />
+      <AmbientProvider>
+        <Screens />
+      </AmbientProvider>
     </AppStateProvider>
   );
 }
